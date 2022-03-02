@@ -8,63 +8,54 @@ data class PhotosResponse(
 	val description: String? = null,
 
 	@field:SerializedName("urls")
-	val urls: ImageUrl,
-
-	@field:SerializedName("width")
-	val width: Int? = null,
-
-	@field:SerializedName("height")
-	val height: Int? = null,
+	val urls: ImageUrl? = null,
 
 	@field:SerializedName("links")
-	val links: Links,
+	val links: Link? = null,
 
 	@field:SerializedName("id")
-	val id: String,
+	val id: String? = null,
 
 	@field:SerializedName("user")
-	val user: User,
+	val user: User? = null,
 )
 
 data class ImageUrl(
 
 	@field:SerializedName("regular")
-	val regular: String,
+	val regular: String? = null,
 
 	@field:SerializedName("full")
-	val full: String
+	val full: String? = null
 )
 
 data class ProfileImage(
 
 	@field:SerializedName("large")
-	val large: String,
+	val large: String? = null,
 
 	@field:SerializedName("medium")
-	val medium: String
+	val medium: String? = null
 )
 
-data class Links(
+data class Link(
 
 	@field:SerializedName("download")
-	val download: String,
+	val download: String? = null,
 
 	@field:SerializedName("download_location")
-	val downloadLocation: String
+	val downloadLocation: String? = null
 )
 
 data class User(
 
 	@field:SerializedName("profile_image")
-	val profileImage: ProfileImage,
+	val profileImage: ProfileImage? = null,
 
 	@field:SerializedName("name")
-	val name: String,
-
-	@field:SerializedName("links")
-	val links: Links,
+	val name: String? = null,
 
 	@field:SerializedName("id")
-	val id: String,
+	val id: String? = null,
 
 )

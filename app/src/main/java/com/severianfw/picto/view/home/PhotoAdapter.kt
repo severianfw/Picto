@@ -2,13 +2,17 @@ package com.severianfw.picto.view.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.data.remote.ImageUrl
 import com.severianfw.picto.databinding.ItemPhotosBinding
 
-class ListAdapter(private val listPhotos: List<ImageUrl>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class PhotoAdapter(private val listPhotos: List<ImageUrl>) :
+    ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
-    inner class ViewHolder(private val binding: ItemPhotosBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemPhotosBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: ImageUrl) {
 
         }
@@ -22,6 +26,13 @@ class ListAdapter(private val listPhotos: List<ImageUrl>): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(listPhotos[position])
     }
+}
 
-    override fun getItemCount(): Int = listPhotos.size
+class PhotoItemDiffCallback : DiffUtil.ItemCallback<ImageUrl>() {
+    override fun areItemsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+        oldItem == newItem
+
+    override fun areContentsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+        oldItem == newItem
+
 }
