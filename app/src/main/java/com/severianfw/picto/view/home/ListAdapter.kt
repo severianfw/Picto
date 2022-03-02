@@ -3,13 +3,13 @@ package com.severianfw.picto.view.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.severianfw.picto.data.remote.ImageUrls
+import com.severianfw.picto.data.remote.ImageUrl
 import com.severianfw.picto.databinding.ItemPhotosBinding
 
-class PhotosAdapter(private val listPhotos: List<ImageUrls>): RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
+class ListAdapter(private val listPhotos: List<ImageUrl>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemPhotosBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: ImageUrls) {
+        fun bind(photo: ImageUrl) {
 
         }
     }

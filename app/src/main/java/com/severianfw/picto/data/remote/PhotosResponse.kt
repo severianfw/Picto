@@ -4,23 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 data class PhotosResponse(
 
-	@field:SerializedName("created_at")
-	val createdAt: String,
-
 	@field:SerializedName("description")
-	val description: Any,
+	val description: String? = null,
 
 	@field:SerializedName("urls")
-	val urls: ImageUrls,
-
-	@field:SerializedName("alt_description")
-	val altDescription: Any,
+	val urls: ImageUrl,
 
 	@field:SerializedName("width")
-	val width: Int,
+	val width: Int? = null,
 
 	@field:SerializedName("height")
-	val height: Int,
+	val height: Int? = null,
 
 	@field:SerializedName("links")
 	val links: Links,
@@ -30,24 +24,9 @@ data class PhotosResponse(
 
 	@field:SerializedName("user")
 	val user: User,
-
-	@field:SerializedName("likes")
-	val likes: Int
 )
 
-data class ImageUrls(
-
-	@field:SerializedName("small")
-	val small: String,
-
-	@field:SerializedName("small_s3")
-	val smallS3: String,
-
-	@field:SerializedName("thumb")
-	val thumb: String,
-
-	@field:SerializedName("raw")
-	val raw: String,
+data class ImageUrl(
 
 	@field:SerializedName("regular")
 	val regular: String,
@@ -57,9 +36,6 @@ data class ImageUrls(
 )
 
 data class ProfileImage(
-
-	@field:SerializedName("small")
-	val small: String,
 
 	@field:SerializedName("large")
 	val large: String,
@@ -79,9 +55,6 @@ data class Links(
 
 data class User(
 
-	@field:SerializedName("bio")
-	val bio: String,
-
 	@field:SerializedName("profile_image")
 	val profileImage: ProfileImage,
 
@@ -94,9 +67,4 @@ data class User(
 	@field:SerializedName("id")
 	val id: String,
 
-	@field:SerializedName("first_name")
-	val firstName: String,
-
-	@field:SerializedName("username")
-	val username: String
 )

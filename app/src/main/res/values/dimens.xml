@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="titleTextSize">24dp</dimen>
+    <dimen name="defaultBorderRadius">8dp</dimen>
+    <dimen name="defaultStrokeWidth">1dp</dimen>
+    <dimen name="defaultElevation">2dp</dimen>
+</resources>

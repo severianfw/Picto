@@ -7,10 +7,10 @@
     tools:context=".view.home.HomeFragment">
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_bar"
+        android:id="@+id/sv_photos"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/bg_search_bar"
+        android:background="@drawable/drawable_background_search_bar"
         android:paddingVertical="18dp"
         app:iconifiedByDefault="false"
         app:queryHint="Search photos"
@@ -32,7 +32,7 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_bar"
+        app:layout_constraintTop_toBottomOf="@id/sv_photos"
         app:spanCount="2"
         tools:listitem="@layout/item_photos" />
 

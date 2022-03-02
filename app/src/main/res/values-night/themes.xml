@@ -17,7 +17,7 @@
 
     <style name="titleFontStyle">
         <item name="android:fontFamily">@font/poppins_bold</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textColor">@color/white_500</item>
     </style>
 </resources>
