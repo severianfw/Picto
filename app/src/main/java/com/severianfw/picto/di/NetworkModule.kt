@@ -1,5 +1,6 @@
-package com.severianfw.picto.data.remote
+package com.severianfw.picto.di
 
+import com.severianfw.picto.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

@@ -8,7 +8,8 @@ interface ApiService {
     @GET("/photos")
     fun getPhotos(
         @Query("client_id") clientId: String,
-        @Query("per_page") itemCount: Int
+        @Query("per_page") itemCount: Int,
+        @Query("page") page: Int,
     ): Single<PhotosResponse>
 
 }

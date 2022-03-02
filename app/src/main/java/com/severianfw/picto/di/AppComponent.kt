@@ -1,7 +1,6 @@
 package com.severianfw.picto.di
 
 import android.app.Application
-import com.severianfw.picto.data.remote.NetworkModule
 import com.severianfw.picto.view.MainActivity
 import com.severianfw.picto.view.home.SettingsBottomSheetDialogFragment
 import dagger.BindsInstance

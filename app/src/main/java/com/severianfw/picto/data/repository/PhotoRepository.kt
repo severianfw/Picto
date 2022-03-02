@@ -15,7 +15,7 @@ class PhotoRepository @Inject constructor(
     }
 
     fun getPhotos(): Single<PhotosResponse> {
-        return apiService.getPhotos(CLIENT_ID, 8)
+        return apiService.getPhotos(CLIENT_ID, 8, 1)
     }
 
 }
