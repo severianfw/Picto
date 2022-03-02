@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var homeViewModel: HomeViewModel
 
-    @Inject
-    lateinit var darkModeUtil: DarkModeUtil
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         (application as PictoApplication).appComponent.inject(this)
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        if (darkModeUtil.isDarkModeActive(resources)) {
+        if (DarkModeUtil.isDarkModeActive(resources)) {
             val item = menu.findItem(R.id.menu_settings)
             item.icon.setTint(ContextCompat.getColor(this, R.color.white_500))
         }

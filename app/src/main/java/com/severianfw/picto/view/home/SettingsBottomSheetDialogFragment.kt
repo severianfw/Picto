@@ -10,15 +10,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.databinding.BottomSheetSettingsBinding
 import com.severianfw.picto.utils.DarkModeUtil
-import javax.inject.Inject
 
 class SettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var darkModeUtil: DarkModeUtil
 
     companion object {
         const val TAG = "SettingsBottomSheetFragment"
@@ -44,7 +40,7 @@ class SettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun checkDarkMode() {
-        if (darkModeUtil.isDarkModeActive(resources)) {
+        if (DarkModeUtil.isDarkModeActive(resources)) {
             binding.scToggleMode.isChecked = true
         }
         binding.scToggleMode.setOnCheckedChangeListener { button, _ ->
