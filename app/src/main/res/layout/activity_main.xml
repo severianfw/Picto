@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryVariant"
-        android:elevation="@dimen/defaultElevation"
+        android:elevation="@dimen/dp_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/toolbar_menu">
 
         <TextView
-            style="@style/titleFontStyle"
+            style="@style/TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
