@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
 
         showHomeFragment()
+
+        homeViewModel.getPhotos()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

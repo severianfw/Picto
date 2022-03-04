@@ -10,6 +10,6 @@ interface ApiService {
         @Query("client_id") clientId: String,
         @Query("per_page") itemCount: Int,
         @Query("page") page: Int,
-    ): Single<PhotosResponse>
+    ): Single<List<PhotoResponse>>
 
 }

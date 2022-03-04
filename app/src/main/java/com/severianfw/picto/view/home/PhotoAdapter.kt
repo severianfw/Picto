@@ -5,16 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.severianfw.picto.data.remote.ImageUrl
 import com.severianfw.picto.databinding.ItemPhotosBinding
 
-class PhotoAdapter(private val listPhotos: List<ImageUrl>) :
+class PhotoAdapter :
     ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
     inner class ViewHolder(private val binding: ItemPhotosBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: ImageUrl) {
-
+            Glide.with(binding.root)
+                .load(photo.regular)
+                .transform(FitCenter(), CenterCrop(), RoundedCorners(32))
+                .into(binding.ivPhoto)
         }
     }
 
@@ -24,7 +31,7 @@ class PhotoAdapter(private val listPhotos: List<ImageUrl>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(listPhotos[position])
+        holder.bind(getItem(position))
     }
 }
 

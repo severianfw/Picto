@@ -29,11 +29,6 @@ class SettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity?.applicationContext as PictoApplication).appComponent.inject(this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkDarkMode()

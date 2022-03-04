@@ -2,7 +2,7 @@ package com.severianfw.picto.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class PhotosResponse(
+data class PhotoResponse(
 
 	@field:SerializedName("description")
 	val description: String? = null,
