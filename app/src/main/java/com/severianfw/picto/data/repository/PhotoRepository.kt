@@ -5,5 +5,5 @@ import io.reactivex.rxjava3.core.Single
 
 interface PhotoRepository {
 
-    fun getPhotos(): Single<List<PhotoResponse>>
+    fun getPhotos(page: Int): Single<List<PhotoResponse>>
 }

@@ -25,13 +25,15 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private var _pageNum: Int = 1
+
     private val compositeDisposable = CompositeDisposable()
 
     fun getPhotos() {
         val photos = mutableListOf<ImageUrl>()
         _isLoading.value = true
         compositeDisposable.add(
-            getPhotoUseCase().subscribeOn(Schedulers.io())
+            getPhotoUseCase(_pageNum).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
                     override fun onSuccess(t: List<PhotoResponse>) {
@@ -48,6 +50,13 @@ class HomeViewModel @Inject constructor(
 
                 })
         )
+    }
+
+    fun loadPage() {
+        if (_pageNum <= 10) {
+            _pageNum += 1
+            getPhotos()
+        }
     }
 
     override fun onCleared() {
