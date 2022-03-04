@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
         val photos = mutableListOf<ImageUrl>()
         _isLoading.value = true
         compositeDisposable.add(
-            getPhotoUseCase.getPhotos().subscribeOn(Schedulers.io())
+            getPhotoUseCase().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
                     override fun onSuccess(t: List<PhotoResponse>) {

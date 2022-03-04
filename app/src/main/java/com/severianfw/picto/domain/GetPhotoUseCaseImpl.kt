@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetPhotoUseCaseImpl @Inject constructor(private val photosRepositoryImpl: PhotoRepositoryImpl) :
     GetPhotoUseCase {
 
-    override fun getPhotos(): Single<List<PhotoResponse>> {
+    override fun invoke(): Single<List<PhotoResponse>> {
         return photosRepositoryImpl.getPhotos()
     }
 }

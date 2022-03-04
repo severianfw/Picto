@@ -58,6 +58,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSettingsBottomSheet() {
+        if (isFinishing) {
+            return
+        }
         SettingsBottomSheetDialogFragment().show(
             supportFragmentManager,
             SettingsBottomSheetDialogFragment.TAG

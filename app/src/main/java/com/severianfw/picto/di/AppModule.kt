@@ -6,13 +6,16 @@ import com.severianfw.picto.domain.GetPhotoUseCase
 import com.severianfw.picto.domain.GetPhotoUseCaseImpl
 import dagger.Binds
 import dagger.Module
+import javax.inject.Singleton
 
 @Module
 abstract class AppModule {
 
+    @Singleton
     @Binds
     abstract fun provideGetPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
 
+    @Singleton
     @Binds
     abstract fun provideGetPhotoUseCase(getPhotoUseCaseImpl: GetPhotoUseCaseImpl): GetPhotoUseCase
 }

@@ -5,5 +5,6 @@ import io.reactivex.rxjava3.core.Single
 
 interface GetPhotoUseCase {
 
-    fun getPhotos(): Single<List<PhotoResponse>>
+    operator fun invoke(): Single<List<PhotoResponse>>
+
 }

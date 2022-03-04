@@ -16,9 +16,23 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="titleFontStyle">
+    <style name="TextView">TextViewStyle</style>
+
+    <style name="TextView.Title">
         <item name="android:fontFamily">@font/poppins_bold</item>
-        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:textSize">@dimen/sp_24</item>
+        <item name="android:textColor">@color/black_200</item>
+    </style>
+
+    <style name="TextView.Caption">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">@dimen/sp_24</item>
+        <item name="android:textColor">@color/black_200</item>
+    </style>
+
+    <style name="TextView.Body">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textColor">@color/black_200</item>
     </style>
 
