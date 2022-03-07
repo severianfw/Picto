@@ -15,6 +15,8 @@ import com.severianfw.picto.databinding.ItemPhotosBinding
 class PhotoAdapter :
     ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
+    private lateinit var onItemClickListener: OnItemClickListener
+
     inner class ViewHolder(private val binding: ItemPhotosBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: ImageUrl) {
@@ -32,7 +34,19 @@ class PhotoAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(getItem(position))
+        }
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(photo: ImageUrl)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
 }
 
 class PhotoItemDiffCallback : DiffUtil.ItemCallback<ImageUrl>() {
