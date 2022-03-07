@@ -14,7 +14,7 @@ class PhotoRepositoryImpl @Inject constructor(
     }
 
     override fun getPhotos(page: Int): Single<List<PhotoResponse>> {
-        return apiService.getPhotos(CLIENT_ID, 8, page)
+        return apiService.getPhotos(CLIENT_ID, 10, page)
     }
 
 }

@@ -19,8 +19,8 @@ class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase
 ) : ViewModel() {
 
-    private val _listPhotos = MutableLiveData<List<ImageUrl>>()
-    val listPhotos: LiveData<List<ImageUrl>> = _listPhotos
+    private val _photos = MutableLiveData<List<ImageUrl>>()
+    val photos: LiveData<List<ImageUrl>> = _photos
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -28,9 +28,13 @@ class HomeViewModel @Inject constructor(
     private var _pageNum: Int = 1
 
     private val compositeDisposable = CompositeDisposable()
+    private val newPhotos = mutableListOf<ImageUrl>()
 
-    fun getPhotos() {
-        val photos = mutableListOf<ImageUrl>()
+    init {
+        getPhotos()
+    }
+
+    private fun getPhotos() {
         _isLoading.value = true
         compositeDisposable.add(
             getPhotoUseCase(_pageNum).subscribeOn(Schedulers.io())
@@ -38,9 +42,9 @@ class HomeViewModel @Inject constructor(
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
                     override fun onSuccess(t: List<PhotoResponse>) {
                         for (item in t) {
-                            item.urls?.let { photos.add(it) }
+                            item.urls?.let { newPhotos.add(it) }
                         }
-                        _listPhotos.value = photos
+                        _photos.value = newPhotos
                         _isLoading.value = false
                     }
 
@@ -52,8 +56,8 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun loadPage() {
-        if (_pageNum <= 10) {
+    fun loadMorePage() {
+        if (_pageNum <= 11) {
             _pageNum += 1
             getPhotos()
         }
