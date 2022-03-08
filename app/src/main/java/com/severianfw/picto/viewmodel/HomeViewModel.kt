@@ -1,5 +1,6 @@
 package com.severianfw.picto.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,13 +20,16 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _photos = MutableLiveData<List<ImageUrl>>()
-    val photos: LiveData<List<ImageUrl>> get() = _photos
+    val photos: LiveData<List<ImageUrl>>
+        get() = _photos
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
-    private val _isResponseSuccess = MutableLiveData<Boolean>()
-    val isResponseSuccess: LiveData<Boolean> get() = _isResponseSuccess
+    private val _hasError = MutableLiveData<Boolean>()
+    val hasError: LiveData<Boolean>
+        get() = _hasError
 
     var isInitial: Boolean = false
 
@@ -43,14 +47,14 @@ class HomeViewModel @Inject constructor(
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
                     override fun onSuccess(response: List<PhotoResponse>) {
                         for (item in response) {
-                            item.urls?.let { newPhoto.add(it) }
+                            newPhoto.add(item.urls!!)
                         }
                         _photos.value = newPhoto
-                        _isResponseSuccess.value = true
                     }
 
                     override fun onError(e: Throwable) {
-                        _isResponseSuccess.value = false
+                        Log.d("MESSAGE", e.message.toString())
+                        _hasError.value = true
                     }
 
                 })
@@ -58,10 +62,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMorePage() {
-        if (pageNumber <= 11) {
-            pageNumber += 1
-            getPhotos()
-        }
+        pageNumber += 1
+        getPhotos()
     }
 
     override fun onCleared() {

@@ -48,13 +48,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadingCheck()
-        responseStatusCheck()
+        errorStatusCheck()
         setupPhotoRecyclerView()
     }
 
-    private fun responseStatusCheck() {
-        homeViewModel.isResponseSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if (!isSuccess) {
+    private fun errorStatusCheck() {
+        homeViewModel.hasError.observe(viewLifecycleOwner) { hasError ->
+            if (hasError) {
                 Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
             }
         }

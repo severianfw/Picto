@@ -13,7 +13,7 @@ abstract class AppModule {
 
     @Singleton
     @Binds
-    abstract fun bindsGetPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
+    abstract fun bindsPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
 
     @Singleton
     @Binds
