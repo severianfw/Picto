@@ -10,10 +10,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.severianfw.picto.data.remote.ImageUrl
+import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.databinding.ItemPhotosBinding
 
 class PhotoAdapter :
-    ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
+    ListAdapter<PhotoResponse, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
     private lateinit var onItemClickListener: OnItemClickListener
 
@@ -33,14 +34,14 @@ class PhotoAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position).urls?.let { holder.bind(it) }
         holder.itemView.setOnClickListener {
             onItemClickListener.onItemClick(getItem(position))
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(photo: ImageUrl)
+        fun onItemClick(photo: PhotoResponse)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -49,11 +50,11 @@ class PhotoAdapter :
 
 }
 
-class PhotoItemDiffCallback : DiffUtil.ItemCallback<ImageUrl>() {
-    override fun areItemsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+class PhotoItemDiffCallback : DiffUtil.ItemCallback<PhotoResponse>() {
+    override fun areItemsTheSame(oldItem: PhotoResponse, newItem: PhotoResponse): Boolean =
         oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+    override fun areContentsTheSame(oldItem: PhotoResponse, newItem: PhotoResponse): Boolean =
         oldItem == newItem
 
 }

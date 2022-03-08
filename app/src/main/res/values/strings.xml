@@ -9,4 +9,5 @@
     <string name="main_photo">main photo</string>
     <string name="profile_picture">profile picture</string>
     <string name="download_button">download button</string>
+    <string name="default_description">No Description</string>
 </resources>

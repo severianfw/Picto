@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.data.remote.ImageUrl
+import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.view.detail.DetailActivity
 import com.severianfw.picto.viewmodel.HomeViewModel
@@ -56,11 +57,10 @@ class HomeFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(context, 2)
         val photoAdapter = PhotoAdapter()
         photoAdapter.setOnItemClickListener(object : PhotoAdapter.OnItemClickListener {
-            override fun onItemClick(photo: ImageUrl) {
+            override fun onItemClick(photo: PhotoResponse) {
                 val detailIntent = Intent(activity, DetailActivity::class.java)
-                TODO("Change item type to PhotoResponse for getting photo & user data")
-//                detailIntent.putExtra(DetailActivity.TAG, photo)
-//                startActivity(detailIntent)
+                detailIntent.putExtra(DetailActivity.TAG, photo)
+                startActivity(detailIntent)
             }
         })
         binding.rvPhotos.apply {

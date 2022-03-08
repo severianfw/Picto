@@ -19,8 +19,8 @@ class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase
 ) : ViewModel() {
 
-    private val _photos = MutableLiveData<List<ImageUrl>>()
-    val photos: LiveData<List<ImageUrl>> = _photos
+    private val _photos = MutableLiveData<List<PhotoResponse>>()
+    val photos: LiveData<List<PhotoResponse>> = _photos
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private var _pageNum: Int = 1
 
     private val compositeDisposable = CompositeDisposable()
-    private val newPhotos = mutableListOf<ImageUrl>()
+    private val newPhotos = mutableListOf<PhotoResponse>()
 
     init {
         getPhotos()
@@ -40,10 +40,8 @@ class HomeViewModel @Inject constructor(
             getPhotoUseCase(_pageNum).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
-                    override fun onSuccess(t: List<PhotoResponse>) {
-                        for (item in t) {
-                            item.urls?.let { newPhotos.add(it) }
-                        }
+                    override fun onSuccess(response: List<PhotoResponse>) {
+                        newPhotos.addAll(response)
                         _photos.value = newPhotos
                         _isLoading.value = false
                     }
