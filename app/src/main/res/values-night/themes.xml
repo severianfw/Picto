@@ -24,13 +24,13 @@
     <style name="TextView.Caption">
         <item name="android:fontFamily">@font/poppins_semibold</item>
         <item name="android:textSize">@dimen/sp_24</item>
-        <item name="android:textColor">@color/black_200</item>
+        <item name="android:textColor">@color/white_500</item>
     </style>
 
     <style name="TextView.Body">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">@dimen/sp_14</item>
-        <item name="android:textColor">@color/black_500</item>
+        <item name="android:textColor">@color/white_500</item>
     </style>
 
 </resources>

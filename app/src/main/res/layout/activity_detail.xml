@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/main_photo"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +53,7 @@
         <TextView
             android:id="@+id/tv_desc"
             style="@style/TextView.Caption"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_20"

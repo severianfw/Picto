@@ -1,10 +1,8 @@
 package com.severianfw.picto.view.detail
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.databinding.ActivityDetailBinding
 
@@ -36,7 +34,9 @@ class DetailActivity : AppCompatActivity() {
                 Glide.with(this@DetailActivity)
                     .load(image.urls?.small)
                     .into(ivPhoto)
-                tvDesc.text = image.description
+                if (image.description != null) {
+                    tvDesc.text = image.description
+                }
                 tvUsername.text = image.user?.name
                 Glide.with(this@DetailActivity)
                     .load(image.user?.profileImage?.medium)
