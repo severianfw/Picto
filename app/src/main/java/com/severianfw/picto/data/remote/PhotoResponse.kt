@@ -26,7 +26,10 @@ data class ImageUrl(
 	val regular: String? = null,
 
 	@field:SerializedName("full")
-	val full: String? = null
+	val full: String? = null,
+
+	@field:SerializedName("small")
+	val small: String? = null,
 )
 
 data class ProfileImage(

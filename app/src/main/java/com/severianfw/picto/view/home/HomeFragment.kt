@@ -23,20 +23,16 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var homeViewModel: HomeViewModel
 
+    companion object {
+        const val SPAN_COUNT = 2
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        getInitialPhotos()
         return binding.root
-    }
-
-    private fun getInitialPhotos() {
-        if (!homeViewModel.isInitial) {
-            homeViewModel.getPhotos()
-            homeViewModel.isInitial = true
-        }
     }
 
     override fun onAttach(context: Context) {
@@ -47,12 +43,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadingCheck()
-        errorStatusCheck()
+        getInitialPhotos()
+        setupLoadingObserver()
+        setupErrorObserver()
         setupPhotoRecyclerView()
     }
 
-    private fun errorStatusCheck() {
+    private fun getInitialPhotos() {
+        if (homeViewModel.isInitial) {
+            homeViewModel.getPhotos()
+            homeViewModel.isInitial = false
+        }
+    }
+
+    private fun setupErrorObserver() {
         homeViewModel.hasError.observe(viewLifecycleOwner) { hasError ->
             if (hasError) {
                 Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
@@ -60,7 +64,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadingCheck() {
+    private fun setupLoadingObserver() {
         homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             this.isLoading = isLoading
             if (isLoading) {
@@ -72,7 +76,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupPhotoRecyclerView() {
-        val gridLayoutManager = GridLayoutManager(context, 2)
+        val gridLayoutManager = GridLayoutManager(context, SPAN_COUNT)
         val photoAdapter = PhotoAdapter()
         binding.rvPhotos.apply {
             layoutManager = gridLayoutManager
@@ -90,7 +94,7 @@ class HomeFragment : Fragment() {
             }
         })
         homeViewModel.photos.observe(viewLifecycleOwner) {
-            photoAdapter.submitList(it.toMutableList())
+            photoAdapter.submitList(it.toList())
         }
     }
 

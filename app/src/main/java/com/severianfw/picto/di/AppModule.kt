@@ -2,8 +2,8 @@ package com.severianfw.picto.di
 
 import com.severianfw.picto.data.repository.PhotoRepository
 import com.severianfw.picto.data.repository.PhotoRepositoryImpl
-import com.severianfw.picto.domain.GetPhotoUseCase
-import com.severianfw.picto.domain.GetPhotoUseCaseImpl
+import com.severianfw.picto.domain.usecase.GetPhotoUseCase
+import com.severianfw.picto.domain.usecase.GetPhotoUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
