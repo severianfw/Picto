@@ -13,9 +13,9 @@ abstract class AppModule {
 
     @Singleton
     @Binds
-    abstract fun provideGetPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
+    abstract fun bindsGetPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
 
     @Singleton
     @Binds
-    abstract fun provideGetPhotoUseCase(getPhotoUseCaseImpl: GetPhotoUseCaseImpl): GetPhotoUseCase
+    abstract fun bindsGetPhotoUseCase(getPhotoUseCaseImpl: GetPhotoUseCaseImpl): GetPhotoUseCase
 }

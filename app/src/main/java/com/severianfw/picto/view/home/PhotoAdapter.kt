@@ -15,12 +15,17 @@ import com.severianfw.picto.databinding.ItemPhotosBinding
 class PhotoAdapter :
     ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
+    companion object {
+        const val CORNERS_RADIUS = 32
+    }
+
     inner class ViewHolder(private val binding: ItemPhotosBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(photo: ImageUrl) {
             Glide.with(binding.root)
                 .load(photo.regular)
-                .transform(FitCenter(), CenterCrop(), RoundedCorners(32))
+                .transform(FitCenter(), CenterCrop(), RoundedCorners(CORNERS_RADIUS))
                 .into(binding.ivPhoto)
         }
     }

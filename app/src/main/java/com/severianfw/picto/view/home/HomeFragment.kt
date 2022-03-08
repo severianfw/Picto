@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
@@ -17,7 +18,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var rvIsLoading = false
+    private var isLoading = false
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
@@ -27,7 +28,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        getInitialPhotos()
         return binding.root
+    }
+
+    private fun getInitialPhotos() {
+        if (!homeViewModel.isInitial) {
+            homeViewModel.getPhotos()
+            homeViewModel.isInitial = true
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -38,15 +47,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadingCheck()
+        responseStatusCheck()
+        setupPhotoRecyclerView()
+    }
+
+    private fun responseStatusCheck() {
+        homeViewModel.isResponseSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (!isSuccess) {
+                Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun loadingCheck() {
         homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            rvIsLoading = isLoading
+            this.isLoading = isLoading
             if (isLoading) {
                 binding.pbPhotos.visibility = View.VISIBLE
             } else {
                 binding.pbPhotos.visibility = View.INVISIBLE
             }
         }
-        setupPhotoRecyclerView()
     }
 
     private fun setupPhotoRecyclerView() {
@@ -62,7 +84,7 @@ class HomeFragment : Fragment() {
                 val lastVisibleItemPosition = gridLayoutManager.findLastVisibleItemPosition()
                 val isLastPosition = itemCount == lastVisibleItemPosition
 
-                if (!rvIsLoading && isLastPosition) {
+                if (!isLoading && isLastPosition) {
                     homeViewModel.loadMorePage()
                 }
             }

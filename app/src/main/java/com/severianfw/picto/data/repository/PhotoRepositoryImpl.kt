@@ -11,10 +11,11 @@ class PhotoRepositoryImpl @Inject constructor(
 
     companion object {
         const val CLIENT_ID = "eH_2mMyrCefjXtAmoudvsdfA6qdHD4ju6jF3yFkY5UU"
+        const val PAGE_SIZE = 10
     }
 
     override fun getPhotos(page: Int): Single<List<PhotoResponse>> {
-        return apiService.getPhotos(CLIENT_ID, 10, page)
+        return apiService.getPhotos(CLIENT_ID, PAGE_SIZE, page)
     }
 
 }
