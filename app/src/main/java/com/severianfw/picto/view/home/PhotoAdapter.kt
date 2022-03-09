@@ -5,16 +5,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.severianfw.picto.data.remote.ImageUrl
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.severianfw.picto.databinding.ItemPhotosBinding
+import com.severianfw.picto.domain.model.PhotoItemModel
 
-class PhotoAdapter(private val listPhotos: List<ImageUrl>) :
-    ListAdapter<ImageUrl, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
+class PhotoAdapter :
+    ListAdapter<PhotoItemModel, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
+
+    companion object {
+        const val CORNERS_RADIUS = 32
+    }
 
     inner class ViewHolder(private val binding: ItemPhotosBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: ImageUrl) {
 
+        fun bind(photo: PhotoItemModel) {
+            Glide.with(binding.root)
+                .load(photo.thumbnailImageUri)
+                .transform(FitCenter(), CenterCrop(), RoundedCorners(CORNERS_RADIUS))
+                .into(binding.ivPhoto)
         }
     }
 
@@ -24,15 +36,15 @@ class PhotoAdapter(private val listPhotos: List<ImageUrl>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(listPhotos[position])
+        holder.bind(getItem(position))
     }
 }
 
-class PhotoItemDiffCallback : DiffUtil.ItemCallback<ImageUrl>() {
-    override fun areItemsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+class PhotoItemDiffCallback : DiffUtil.ItemCallback<PhotoItemModel>() {
+    override fun areItemsTheSame(oldItem: PhotoItemModel, newItem: PhotoItemModel): Boolean =
         oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: ImageUrl, newItem: ImageUrl): Boolean =
+    override fun areContentsTheSame(oldItem: PhotoItemModel, newItem: PhotoItemModel): Boolean =
         oldItem == newItem
 
 }

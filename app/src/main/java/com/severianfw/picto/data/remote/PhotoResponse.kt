@@ -2,7 +2,7 @@ package com.severianfw.picto.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class PhotosResponse(
+data class PhotoResponse(
 
 	@field:SerializedName("description")
 	val description: String? = null,
@@ -26,7 +26,10 @@ data class ImageUrl(
 	val regular: String? = null,
 
 	@field:SerializedName("full")
-	val full: String? = null
+	val full: String? = null,
+
+	@field:SerializedName("small")
+	val small: String? = null,
 )
 
 data class ProfileImage(

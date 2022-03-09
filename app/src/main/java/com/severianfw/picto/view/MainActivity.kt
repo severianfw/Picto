@@ -11,15 +11,10 @@ import com.severianfw.picto.databinding.ActivityMainBinding
 import com.severianfw.picto.utils.DarkModeUtil
 import com.severianfw.picto.view.home.HomeFragment
 import com.severianfw.picto.view.home.SettingsBottomSheetDialogFragment
-import com.severianfw.picto.viewmodel.HomeViewModel
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
-
-    @Inject
-    lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
