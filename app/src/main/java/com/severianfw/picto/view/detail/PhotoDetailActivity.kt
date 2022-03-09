@@ -2,7 +2,6 @@ package com.severianfw.picto.view.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.databinding.ActivityDetailBinding
@@ -27,7 +26,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val photoItem = intent.getParcelableExtra<PhotoItemModel>(TAG)
+        val photoItem = intent.getParcelableExtra<PhotoItemModel>(Constant.PHOTO_ITEM)
         setPhotoData(photoItem)
         setBackButtonListener()
         setDownloadButtonListener(photoItem)
@@ -48,7 +47,6 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun setPhotoData(photoItem: PhotoItemModel?) {
-        val photoItem = intent.getParcelableExtra<PhotoItemModel>(Constant.PHOTO_ITEM)
         if (photoItem != null) {
             with(binding) {
                 Glide.with(this@PhotoDetailActivity)
@@ -65,3 +63,4 @@ class PhotoDetailActivity : AppCompatActivity() {
             }
         }
     }
+}
