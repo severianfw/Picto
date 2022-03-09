@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.severianfw.picto.data.remote.SearchPhotoResponse
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
+import com.severianfw.picto.domain.usecase.SearchPhotoUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
@@ -15,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class HomeViewModel @Inject constructor(
-    private val getPhotoUseCase: GetPhotoUseCase
+    private val getPhotoUseCase: GetPhotoUseCase,
+    private val searchPhotoUseCase: SearchPhotoUseCase
 ) : ViewModel() {
 
     private val _photos = MutableLiveData<List<PhotoItemModel>>()
@@ -33,6 +36,8 @@ class HomeViewModel @Inject constructor(
     var isInitial: Boolean = true
 
     private var pageNumber: Int = 1
+    private var isSearching = false
+    private var photoName: String = ""
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -58,7 +63,38 @@ class HomeViewModel @Inject constructor(
 
     fun loadMorePage() {
         pageNumber += 1
-        getPhotos()
+        if (isSearching) {
+            searchPhotos(photoName)
+        } else {
+            getPhotos()
+        }
+    }
+
+    fun searchPhotos(photoName: String) {
+        this.photoName = photoName
+        isSearching = true
+        _isLoading.value = true
+        compositeDisposable.add(
+            searchPhotoUseCase(pageNumber, photoName).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally { _isLoading.value = false }
+                .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
+                    override fun onSuccess(newPhotos: List<PhotoItemModel>) {
+                        _photos.value = _photos.value.orEmpty().plus(newPhotos)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.d("MESSAGE", e.message.toString())
+                        _hasError.value = true
+                    }
+
+                })
+        )
+    }
+
+    fun clearPhotoList() {
+        val emptyPhotoList = mutableListOf<PhotoItemModel>()
+        _photos.value = emptyPhotoList
     }
 
     override fun onCleared() {
