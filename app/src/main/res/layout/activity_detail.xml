@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/dp_30"
-        tools:context=".view.detail.DetailActivity">
+        tools:context=".view.detail.PhotoDetailActivity">
 
         <ImageButton
             android:id="@+id/btn_back"
