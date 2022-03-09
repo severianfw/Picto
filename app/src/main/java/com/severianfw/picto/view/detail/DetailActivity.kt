@@ -3,8 +3,8 @@ package com.severianfw.picto.view.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.databinding.ActivityDetailBinding
+import com.severianfw.picto.domain.model.PhotoItemModel
 
 class DetailActivity : AppCompatActivity() {
 
@@ -28,18 +28,18 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setPhotoData() {
-        val image = intent.getParcelableExtra<PhotoResponse>(TAG)
+        val image = intent.getParcelableExtra<PhotoItemModel>(TAG)
         if (image != null) {
             binding.apply {
                 Glide.with(this@DetailActivity)
-                    .load(image.urls?.small)
+                    .load(image.mainImageUri)
                     .into(ivPhoto)
-                if (image.description != null) {
+                if (image.description.isNotBlank()) {
                     tvDesc.text = image.description
                 }
-                tvUsername.text = image.user?.name
+                tvUsername.text = image.authorName
                 Glide.with(this@DetailActivity)
-                    .load(image.user?.profileImage?.medium)
+                    .load(image.profilePictureUri)
                     .circleCrop()
                     .into(ivUserProfilePicture)
             }

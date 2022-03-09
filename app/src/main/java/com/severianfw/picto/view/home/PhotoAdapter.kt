@@ -46,12 +46,13 @@ class PhotoAdapter :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(photo: PhotoResponse)
+        fun onItemClick(photo: PhotoItemModel)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
     }
+}
 
 class PhotoItemDiffCallback : DiffUtil.ItemCallback<PhotoItemModel>() {
     override fun areItemsTheSame(oldItem: PhotoItemModel, newItem: PhotoItemModel): Boolean =
