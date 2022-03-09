@@ -6,14 +6,14 @@ import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.databinding.ActivityDetailBinding
 import com.severianfw.picto.domain.model.PhotoItemModel
-import com.severianfw.picto.viewmodel.DetailViewModel
+import com.severianfw.picto.viewmodel.PhotoDetailViewModel
 import javax.inject.Inject
 import com.severianfw.picto.utils.Constant
 
 class PhotoDetailActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var detailViewModel: DetailViewModel
+    lateinit var photoDetailViewModel: PhotoDetailViewModel
 
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
@@ -41,7 +41,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun setDownloadButtonListener(photoItem: PhotoItemModel?) {
         binding.btnDownload.setOnClickListener {
             if (photoItem != null) {
-                detailViewModel.downloadPhoto(photoItem.mainImageUri)
+                photoDetailViewModel.downloadPhoto(photoItem.mainImageUri)
             }
         }
     }
