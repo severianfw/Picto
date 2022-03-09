@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.severianfw.picto.databinding.ItemPhotosBinding
 import com.severianfw.picto.domain.model.PhotoItemModel
 
-class PhotoAdapter :
+class PhotoAdapter(private inline val onClick: (photoItem: PhotoItemModel) -> Unit) :
     ListAdapter<PhotoItemModel, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
 
     companion object {
@@ -36,7 +36,10 @@ class PhotoAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(holder.bindingAdapterPosition))
+        holder.itemView.setOnClickListener {
+            onClick(getItem(holder.bindingAdapterPosition))
+        }
     }
 }
 

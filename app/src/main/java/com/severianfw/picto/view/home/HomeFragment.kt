@@ -1,6 +1,7 @@
 package com.severianfw.picto.view.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.databinding.FragmentHomeBinding
+import com.severianfw.picto.utils.Constant
+import com.severianfw.picto.view.detail.PhotoDetailActivity
 import com.severianfw.picto.viewmodel.HomeViewModel
 import javax.inject.Inject
 
@@ -77,7 +80,11 @@ class HomeFragment : Fragment() {
 
     private fun setupPhotoRecyclerView() {
         val gridLayoutManager = GridLayoutManager(context, SPAN_COUNT)
-        val photoAdapter = PhotoAdapter()
+        val photoAdapter = PhotoAdapter { photoItem ->
+            val detailIntent = Intent(activity, PhotoDetailActivity::class.java)
+            detailIntent.putExtra(Constant.PHOTO_ITEM, photoItem)
+            startActivity(detailIntent)
+        }
         binding.rvPhotos.apply {
             layoutManager = gridLayoutManager
             adapter = photoAdapter
