@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Picto">
         <activity
-            android:name=".view.detail.DetailActivity"
+            android:name=".view.detail.PhotoDetailActivity"
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"

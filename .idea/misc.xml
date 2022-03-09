@@ -5,7 +5,8 @@
       <map>
         <entry key="..\:/Training/Picto/app/src/main/res/drawable/bg_search_bar.xml" value="0.154" />
         <entry key="..\:/Training/Picto/app/src/main/res/drawable/drawable_background_search_bar.xml" value="0.154" />
-        <entry key="..\:/Training/Picto/app/src/main/res/layout/activity_detail.xml" value="0.33" />
+        <entry key="..\:/Training/Picto/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2075" />
+        <entry key="..\:/Training/Picto/app/src/main/res/layout/activity_detail.xml" value="0.25" />
         <entry key="..\:/Training/Picto/app/src/main/res/layout/activity_main.xml" value="0.152" />
         <entry key="..\:/Training/Picto/app/src/main/res/layout/bottom_sheet.xml" value="0.2" />
         <entry key="..\:/Training/Picto/app/src/main/res/layout/bottom_sheet_settings.xml" value="0.22826086956521738" />

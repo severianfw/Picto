@@ -1,5 +1,6 @@
 package com.severianfw.picto.view.detail
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -8,18 +9,15 @@ import com.severianfw.picto.databinding.ActivityDetailBinding
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.viewmodel.DetailViewModel
 import javax.inject.Inject
+import com.severianfw.picto.utils.Constant
 
-class DetailActivity : AppCompatActivity() {
+class PhotoDetailActivity : AppCompatActivity() {
 
     @Inject
     lateinit var detailViewModel: DetailViewModel
 
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        const val TAG = "detail_activity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -50,20 +48,20 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setPhotoData(photoItem: PhotoItemModel?) {
+        val photoItem = intent.getParcelableExtra<PhotoItemModel>(Constant.PHOTO_ITEM)
         if (photoItem != null) {
-            binding.apply {
-                Glide.with(this@DetailActivity)
+            with(binding) {
+                Glide.with(this@PhotoDetailActivity)
                     .load(photoItem.mainImageUri)
                     .into(ivPhoto)
                 if (photoItem.description.isNotBlank()) {
                     tvDesc.text = photoItem.description
                 }
                 tvUsername.text = photoItem.authorName
-                Glide.with(this@DetailActivity)
+                Glide.with(this@PhotoDetailActivity)
                     .load(photoItem.profilePictureUri)
                     .circleCrop()
                     .into(ivUserProfilePicture)
             }
         }
     }
-}
