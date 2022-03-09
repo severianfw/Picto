@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
@@ -21,10 +22,14 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var rvIsLoading = false
+    private var isLoading = false
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
+
+    companion object {
+        const val SPAN_COUNT = 2
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,19 +47,40 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getInitialPhotos()
+        setupLoadingObserver()
+        setupErrorObserver()
+        setupPhotoRecyclerView()
+    }
+
+    private fun getInitialPhotos() {
+        if (homeViewModel.isInitial) {
+            homeViewModel.getPhotos()
+            homeViewModel.isInitial = false
+        }
+    }
+
+    private fun setupErrorObserver() {
+        homeViewModel.hasError.observe(viewLifecycleOwner) { hasError ->
+            if (hasError) {
+                Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupLoadingObserver() {
         homeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            rvIsLoading = isLoading
+            this.isLoading = isLoading
             if (isLoading) {
                 binding.pbPhotos.visibility = View.VISIBLE
             } else {
                 binding.pbPhotos.visibility = View.INVISIBLE
             }
         }
-        setupPhotoRecyclerView()
     }
 
     private fun setupPhotoRecyclerView() {
-        val gridLayoutManager = GridLayoutManager(context, 2)
+        val gridLayoutManager = GridLayoutManager(context, SPAN_COUNT)
         val photoAdapter = PhotoAdapter()
         photoAdapter.setOnItemClickListener(object : PhotoAdapter.OnItemClickListener {
             override fun onItemClick(photo: PhotoResponse) {
@@ -73,13 +99,13 @@ class HomeFragment : Fragment() {
                 val lastVisibleItemPosition = gridLayoutManager.findLastVisibleItemPosition()
                 val isLastPosition = itemCount == lastVisibleItemPosition
 
-                if (!rvIsLoading && isLastPosition) {
+                if (!isLoading && isLastPosition) {
                     homeViewModel.loadMorePage()
                 }
             }
         })
         homeViewModel.photos.observe(viewLifecycleOwner) {
-            photoAdapter.submitList(it.toMutableList())
+            photoAdapter.submitList(it.toList())
         }
     }
 

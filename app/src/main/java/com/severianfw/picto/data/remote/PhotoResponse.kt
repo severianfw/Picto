@@ -7,17 +7,17 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PhotoResponse(
 
-    @field:SerializedName("description")
-    val description: String? = null,
+	@field:SerializedName("description")
+	val description: String? = null,
 
-    @field:SerializedName("urls")
-    val urls: ImageUrl? = null,
+	@field:SerializedName("urls")
+	val urls: ImageUrl? = null,
 
-    @field:SerializedName("links")
-    val links: Link? = null,
+	@field:SerializedName("links")
+	val links: Link? = null,
 
-    @field:SerializedName("id")
-    val id: String? = null,
+	@field:SerializedName("id")
+	val id: String? = null,
 
     @field:SerializedName("user")
     val user: User? = null,

@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.severianfw.picto.data.remote.ImageUrl
-import com.severianfw.picto.data.remote.PhotoResponse
-import com.severianfw.picto.domain.GetPhotoUseCase
+import com.severianfw.picto.domain.model.PhotoItemModel
+import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
@@ -19,35 +18,38 @@ class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase
 ) : ViewModel() {
 
-    private val _photos = MutableLiveData<List<PhotoResponse>>()
-    val photos: LiveData<List<PhotoResponse>> = _photos
+    private val _photos = MutableLiveData<List<PhotoItemModel>>()
+    val photos: LiveData<List<PhotoItemModel>>
+        get() = _photos
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
-    private var _pageNum: Int = 1
+    private val _hasError = MutableLiveData<Boolean>()
+    val hasError: LiveData<Boolean>
+        get() = _hasError
+
+    var isInitial: Boolean = true
+
+    private var pageNumber: Int = 1
 
     private val compositeDisposable = CompositeDisposable()
-    private val newPhotos = mutableListOf<PhotoResponse>()
 
-    init {
-        getPhotos()
-    }
-
-    private fun getPhotos() {
+    fun getPhotos() {
         _isLoading.value = true
         compositeDisposable.add(
-            getPhotoUseCase(_pageNum).subscribeOn(Schedulers.io())
+            getPhotoUseCase(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<PhotoResponse>>() {
-                    override fun onSuccess(response: List<PhotoResponse>) {
-                        newPhotos.addAll(response)
-                        _photos.value = newPhotos
-                        _isLoading.value = false
+                .doFinally { _isLoading.value = false }
+                .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
+                    override fun onSuccess(newPhotos: List<PhotoItemModel>) {
+                        _photos.value = _photos.value.orEmpty().plus(newPhotos)
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d("RESPONSE", e.message.toString())
+                        Log.d("MESSAGE", e.message.toString())
+                        _hasError.value = true
                     }
 
                 })
@@ -55,10 +57,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMorePage() {
-        if (_pageNum <= 11) {
-            _pageNum += 1
-            getPhotos()
-        }
+        pageNumber += 1
+        getPhotos()
     }
 
     override fun onCleared() {
