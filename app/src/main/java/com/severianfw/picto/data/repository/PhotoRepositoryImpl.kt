@@ -1,13 +1,16 @@
 package com.severianfw.picto.data.repository
 
+import com.severianfw.picto.data.local.PhotoDao
 import com.severianfw.picto.data.remote.ApiService
 import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.data.remote.SearchPhotoResponse
+import com.severianfw.picto.domain.model.PhotoItemModel
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val photoDao: PhotoDao
 ) : PhotoRepository {
 
     companion object {
@@ -21,6 +24,14 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override fun searchPhotos(page: Int, photoName: String): Single<SearchPhotoResponse> {
         return apiService.searchPhotos(CLIENT_ID, PAGE_SIZE, page, photoName)
+    }
+
+    override fun insertPhotos(photo: PhotoItemModel) {
+        return photoDao.insert(photo)
+    }
+
+    override fun getOfflinePhotos(): Single<List<PhotoItemModel>> {
+        return photoDao.getAllPhoto()
     }
 
 }

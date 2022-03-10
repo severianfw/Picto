@@ -32,4 +32,12 @@ abstract class AppModule {
     @Binds
     abstract fun bindsDownloadManagerUseCase(downloadPhotoUseCaseImpl: DownloadPhotoUseCaseImpl): DownloadPhotoUseCase
 
+    @Singleton
+    @Binds
+    abstract fun bindsInsertPhotoUseCase(insertPhotoUseCaseImpl: InsertPhotoUseCaseImpl): InsertPhotoUseCase
+
+    @Singleton
+    @Binds
+    abstract fun bindsGetOfflinePhotoUseCase(getOfflinePhotoUseCaseImpl: GetOfflinePhotoUseCaseImpl): GetOfflinePhotoUseCase
+
 }
