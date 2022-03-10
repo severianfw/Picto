@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.severianfw.picto.domain.usecase.DownloadPhotoUseCase
 import javax.inject.Inject
 
-class DetailViewModel @Inject constructor(
+class PhotoDetailViewModel @Inject constructor(
     private val downloadPhotoUseCase: DownloadPhotoUseCase
 ) : ViewModel() {
 
