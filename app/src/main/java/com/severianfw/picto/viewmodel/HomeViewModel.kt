@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.severianfw.picto.data.local.PhotoRoomDatabase
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
-import com.severianfw.picto.domain.usecase.InsertPhotoUseCase
 import com.severianfw.picto.domain.usecase.SearchPhotoUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -22,7 +22,7 @@ import javax.inject.Singleton
 class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase,
     private val searchPhotoUseCase: SearchPhotoUseCase,
-    private val insertPhotoUseCase: InsertPhotoUseCase
+    private val photoRoomDatabase: PhotoRoomDatabase
 ) : ViewModel() {
 
     private val _photos = MutableLiveData<List<PhotoItemModel>>()
@@ -52,9 +52,6 @@ class HomeViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
                     _isLoading.value = false
-                    viewModelScope.launch(Dispatchers.IO) {
-                        insertPhotoUseCase(_photos.value.orEmpty())
-                    }
                 }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
@@ -105,6 +102,12 @@ class HomeViewModel @Inject constructor(
     fun clearPhotoList() {
         val emptyPhotoList = mutableListOf<PhotoItemModel>()
         _photos.value = emptyPhotoList
+    }
+
+    fun clearPhotoDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            photoRoomDatabase.clearAllTables()
+        }
     }
 
     override fun onCleared() {

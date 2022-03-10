@@ -15,7 +15,7 @@ class StorageModule {
     @Provides
     fun providesRoomDatabase(context: Context) : PhotoRoomDatabase {
         return Room.databaseBuilder(
-            context.applicationContext,
+            context,
             PhotoRoomDatabase::class.java,
             "photo_database"
         ).build()

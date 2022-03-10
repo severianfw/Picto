@@ -2,16 +2,20 @@ package com.severianfw.picto.view.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
+import com.severianfw.picto.connectionlistener.InternetConnectionListener
 import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
@@ -26,6 +30,12 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
+
+    @Inject
+    lateinit var internetConnectionListener: InternetConnectionListener
+
+    @Inject
+    lateinit var networkRequest: NetworkRequest
 
     companion object {
         const val SPAN_COUNT = 2
@@ -48,10 +58,30 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getInitialPhotos()
+        setupNetworkRequest()
         setupLoadingObserver()
         setupErrorObserver()
         setupPhotoRecyclerView()
         setupSearchView()
+    }
+
+    private fun setupNetworkRequest() {
+        val networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                super.onCapabilitiesChanged(network, networkCapabilities)
+            }
+
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        }
+        val connectivityManager =
+            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.requestNetwork(networkRequest, networkCallback)
     }
 
     private fun setupSearchView() {
@@ -74,6 +104,9 @@ class HomeFragment : Fragment() {
 
     private fun getInitialPhotos() {
         if (homeViewModel.isInitial) {
+            if (internetConnectionListener.isInternetAvailable()) {
+                homeViewModel.clearPhotoDatabase()
+            }
             homeViewModel.getPhotos()
             homeViewModel.isInitial = false
         }
