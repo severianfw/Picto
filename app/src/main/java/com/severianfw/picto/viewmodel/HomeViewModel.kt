@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.severianfw.picto.data.remote.SearchPhotoResponse
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.domain.usecase.SearchPhotoUseCase
@@ -92,8 +91,8 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun clearPhotoList() {
-        val emptyPhotoList = mutableListOf<PhotoItemModel>()
+    fun clearPhotos() {
+        val emptyPhotoList = emptyList<PhotoItemModel>()
         _photos.value = emptyPhotoList
     }
 
