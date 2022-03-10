@@ -92,8 +92,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clearPhotos() {
-        val emptyPhotoList = emptyList<PhotoItemModel>()
-        _photos.value = emptyPhotoList
+        _photos.value = emptyList()
     }
 
     override fun onCleared() {
