@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
@@ -50,6 +51,25 @@ class HomeFragment : Fragment() {
         setupLoadingObserver()
         setupErrorObserver()
         setupPhotoRecyclerView()
+        setupSearchView()
+    }
+
+    private fun setupSearchView() {
+        binding.svPhotos.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(text: String?): Boolean {
+                text?.let {
+                    homeViewModel.clearPhotos()
+                    homeViewModel.searchPhotos(text)
+                    return true
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                return true
+            }
+
+        })
     }
 
     private fun getInitialPhotos() {

@@ -12,4 +12,11 @@ interface ApiService {
         @Query("page") page: Int,
     ): Single<List<PhotoResponse>>
 
+    @GET("/search/photos")
+    fun searchPhotos(
+        @Query("client_id") clientId: String,
+        @Query("per_page") itemCount: Int,
+        @Query("page") page: Int,
+        @Query("query") photoName: String
+    ): Single<SearchPhotoResponse>
 }
