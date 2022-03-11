@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
@@ -93,11 +95,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.svPhotos.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.svPhotos.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
-                if (text != null) {
-                    homeViewModel.clearPhotoList()
+                text?.let {
+                    homeViewModel.clearPhotos()
                     homeViewModel.searchPhotos(text)
                     return true
                 }

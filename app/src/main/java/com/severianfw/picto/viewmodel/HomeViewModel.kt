@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.severianfw.picto.data.local.PhotoRoomDatabase
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.domain.usecase.SearchPhotoUseCase
@@ -67,7 +65,6 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-
     fun loadMorePage() {
         pageNumber += 1
         if (isSearching) {
@@ -99,10 +96,9 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun clearPhotoList() {
+    fun clearPhotos() {
         viewModelScope.launch(Dispatchers.IO) {
-            val emptyPhotoList = mutableListOf<PhotoItemModel>()
-            _photos.postValue(emptyPhotoList)
+            _photos.value = emptyList()
         }
     }
 
@@ -110,7 +106,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             photoRoomDatabase.clearAllTables()
         }
-    }
 
     override fun onCleared() {
         super.onCleared()
