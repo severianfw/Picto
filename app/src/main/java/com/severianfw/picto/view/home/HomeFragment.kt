@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -76,14 +75,14 @@ class HomeFragment : Fragment() {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                homeViewModel.clearPhotoList()
+                homeViewModel.clearPhotos()
                 homeViewModel.isInitial = true
                 getInitialPhotos()
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-                homeViewModel.clearPhotoList()
+                homeViewModel.clearPhotos()
                 homeViewModel.isInitial = true
                 getInitialPhotos()
                 Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
