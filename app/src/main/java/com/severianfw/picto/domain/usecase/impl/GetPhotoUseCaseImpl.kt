@@ -6,20 +6,36 @@ import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.utils.PhotoMapper
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetPhotoUseCaseImpl @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val internetConnectionListener: InternetConnectionListener
-    ) : GetPhotoUseCase {
+) : GetPhotoUseCase {
 
-    override fun invoke(page: Int): Single<List<PhotoItemModel>> {
-        return if (internetConnectionListener.isInternetAvailable()) {
-            photoRepository.getPhotos(page).map { response ->
+    override fun invoke(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
+        return getRemotePhotos(page, isInitial)
+    }
+
+    private fun getRemotePhotos(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
+        if (internetConnectionListener.isInternetAvailable()) {
+            if (isInitial) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    photoRepository.clearLocalPhotos()
+                }
+            }
+            return photoRepository.getPhotos(page).map { response ->
                 PhotoMapper.mapToPhotoItemModel(response)
             }
         } else {
-            photoRepository.getLocalPhotos()
+            // ignore load more
+            if (page == 1) {
+                return photoRepository.getLocalPhotos()
+            }
+            return Single.just(emptyList())
         }
     }
 }

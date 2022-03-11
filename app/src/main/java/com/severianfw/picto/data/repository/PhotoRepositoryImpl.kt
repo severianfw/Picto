@@ -6,8 +6,10 @@ import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.data.remote.SearchPhotoResponse
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.utils.PhotoMapper
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
@@ -22,8 +24,10 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override fun getPhotos(page: Int): Single<List<PhotoResponse>> {
         return apiService.getPhotos(CLIENT_ID, PAGE_SIZE, page).doOnSuccess {
-            val photos = PhotoMapper.mapToPhotoItemModel(it)
-            photoDao.insert(photos)
+            CoroutineScope(Dispatchers.IO).launch {
+                val photos = PhotoMapper.mapToPhotoItemModel(it)
+                photoDao.insertPhotos(photos)
+            }
         }
     }
 
@@ -32,7 +36,11 @@ class PhotoRepositoryImpl @Inject constructor(
     }
 
     override fun getLocalPhotos(): Single<List<PhotoItemModel>> {
-        return photoDao.getAllPhoto()
+        return photoDao.getPhotos()
+    }
+
+    override fun clearLocalPhotos() {
+        return photoDao.deletePhotos()
     }
 
 }

@@ -2,9 +2,6 @@ package com.severianfw.picto.view.home
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,7 +12,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
-import com.severianfw.picto.connectionlistener.InternetConnectionListener
 import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
@@ -30,12 +26,6 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
-
-    @Inject
-    lateinit var internetConnectionListener: InternetConnectionListener
-
-    @Inject
-    lateinit var networkRequest: NetworkRequest
 
     companion object {
         const val SPAN_COUNT = 2
@@ -57,40 +47,21 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkIfOffline()
-        setupNetworkRequest()
+        getInitialPhotos()
+        setupSwipeRefreshLayout()
         setupLoadingObserver()
         setupErrorObserver()
         setupPhotoRecyclerView()
         setupSearchView()
     }
 
-    private fun checkIfOffline() {
-        if (!internetConnectionListener.isInternetAvailable()) {
+    private fun setupSwipeRefreshLayout() {
+        binding.srlPhotos.setOnRefreshListener {
+            homeViewModel.clearPhotos()
+            homeViewModel.isInitial = true
             getInitialPhotos()
+            binding.srlPhotos.isRefreshing = false
         }
-    }
-
-    private fun setupNetworkRequest() {
-        val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                homeViewModel.clearPhotos()
-                homeViewModel.isInitial = true
-                getInitialPhotos()
-            }
-
-            override fun onLost(network: Network) {
-                super.onLost(network)
-                homeViewModel.clearPhotos()
-                homeViewModel.isInitial = true
-                getInitialPhotos()
-                Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
-            }
-        }
-        val connectivityManager =
-            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.requestNetwork(networkRequest, networkCallback)
     }
 
     private fun setupSearchView() {
@@ -113,18 +84,18 @@ class HomeFragment : Fragment() {
 
     private fun getInitialPhotos() {
         if (homeViewModel.isInitial) {
-            if (internetConnectionListener.isInternetAvailable()) {
-                homeViewModel.clearPhotoDatabase()
+            homeViewModel.apply {
+                pageNumber = 1
+                getPhotos()
+                isInitial = false
             }
-            homeViewModel.getPhotos()
-            homeViewModel.isInitial = false
         }
     }
 
     private fun setupErrorObserver() {
         homeViewModel.hasError.observe(viewLifecycleOwner) { hasError ->
             if (hasError) {
-                Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Failed to get photo", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -158,9 +129,7 @@ class HomeFragment : Fragment() {
                 val isLastPosition = itemCount == lastVisibleItemPosition
 
                 if (!isLoading && isLastPosition) {
-                    if (internetConnectionListener.isInternetAvailable()) {
-                        homeViewModel.loadMorePage()
-                    }
+                    homeViewModel.loadMorePage()
                 }
             }
         })

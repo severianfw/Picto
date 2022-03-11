@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.severianfw.picto.data.local.PhotoRoomDatabase
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.domain.usecase.SearchPhotoUseCase
@@ -21,8 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase,
-    private val searchPhotoUseCase: SearchPhotoUseCase,
-    private val photoRoomDatabase: PhotoRoomDatabase
+    private val searchPhotoUseCase: SearchPhotoUseCase
 ) : ViewModel() {
 
     private val _photos = MutableLiveData<List<PhotoItemModel>>()
@@ -38,20 +36,20 @@ class HomeViewModel @Inject constructor(
         get() = _hasError
 
     var isInitial: Boolean = true
+    var pageNumber: Int = 1
 
-    private var pageNumber: Int = 1
     private var isSearching = false
     private var photoName: String = ""
 
     private val compositeDisposable = CompositeDisposable()
 
     fun getPhotos() {
-        _isLoading.postValue(true)
+        _isLoading.value = true
         compositeDisposable.add(
-            getPhotoUseCase(pageNumber).subscribeOn(Schedulers.io())
+            getPhotoUseCase(pageNumber, isInitial).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
-                    _isLoading.postValue(false)
+                    _isLoading.value = false
                 }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
@@ -101,12 +99,6 @@ class HomeViewModel @Inject constructor(
     fun clearPhotos() {
         viewModelScope.launch(Dispatchers.IO) {
             _photos.postValue(emptyList())
-        }
-    }
-
-    fun clearPhotoDatabase() {
-        viewModelScope.launch(Dispatchers.IO) {
-            photoRoomDatabase.clearAllTables()
         }
     }
 
