@@ -46,12 +46,12 @@ class HomeViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     fun getPhotos() {
-        _isLoading.value = true
+        _isLoading.postValue(true)
         compositeDisposable.add(
             getPhotoUseCase(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
-                    _isLoading.value = false
+                    _isLoading.postValue(false)
                 }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
@@ -100,8 +100,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun clearPhotoList() {
-        val emptyPhotoList = mutableListOf<PhotoItemModel>()
-        _photos.value = emptyPhotoList
+        viewModelScope.launch(Dispatchers.IO) {
+            val emptyPhotoList = mutableListOf<PhotoItemModel>()
+            _photos.postValue(emptyPhotoList)
+        }
     }
 
     fun clearPhotoDatabase() {

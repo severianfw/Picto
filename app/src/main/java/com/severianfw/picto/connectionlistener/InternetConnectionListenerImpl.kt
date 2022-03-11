@@ -2,13 +2,16 @@ package com.severianfw.picto.connectionlistener
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import javax.inject.Inject
 
 class InternetConnectionListenerImpl @Inject constructor(
-    private val context: Context
+    private val context: Context,
 ) : InternetConnectionListener {
 
     @RequiresApi(Build.VERSION_CODES.M)

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -57,7 +56,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getInitialPhotos()
+        checkIfOffline()
         setupNetworkRequest()
         setupLoadingObserver()
         setupErrorObserver()
@@ -65,17 +64,26 @@ class HomeFragment : Fragment() {
         setupSearchView()
     }
 
+    private fun checkIfOffline() {
+        if (!internetConnectionListener.isInternetAvailable()) {
+            getInitialPhotos()
+        }
+    }
+
     private fun setupNetworkRequest() {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onCapabilitiesChanged(
-                network: Network,
-                networkCapabilities: NetworkCapabilities
-            ) {
-                super.onCapabilitiesChanged(network, networkCapabilities)
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                homeViewModel.clearPhotoList()
+                homeViewModel.isInitial = true
+                getInitialPhotos()
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
+                homeViewModel.clearPhotoList()
+                homeViewModel.isInitial = true
+                getInitialPhotos()
                 Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
             }
         }
@@ -85,7 +93,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.svPhotos.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.svPhotos.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 if (text != null) {
                     homeViewModel.clearPhotoList()
@@ -149,7 +158,9 @@ class HomeFragment : Fragment() {
                 val isLastPosition = itemCount == lastVisibleItemPosition
 
                 if (!isLoading && isLastPosition) {
-                    homeViewModel.loadMorePage()
+                    if (internetConnectionListener.isInternetAvailable()) {
+                        homeViewModel.loadMorePage()
+                    }
                 }
             }
         })
