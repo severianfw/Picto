@@ -6,6 +6,8 @@ import com.severianfw.picto.data.local.PhotoDao
 import com.severianfw.picto.data.local.PhotoRoomDatabase
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -25,5 +27,10 @@ class StorageModule {
     @Provides
     fun providesPhotoDao(photoRoomDatabase: PhotoRoomDatabase) : PhotoDao {
         return photoRoomDatabase.getPhotoDao()
+    }
+
+    @Provides
+    fun providesDispatchersIO(): CoroutineDispatcher {
+        return Dispatchers.IO
     }
 }

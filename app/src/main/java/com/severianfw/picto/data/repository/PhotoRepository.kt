@@ -10,5 +10,5 @@ interface PhotoRepository {
     fun getPhotos(page: Int): Single<List<PhotoResponse>>
     fun searchPhotos(page: Int, photoName: String): Single<SearchPhotoResponse>
     fun getLocalPhotos(): Single<List<PhotoItemModel>>
-    fun clearLocalPhotos()
+    fun deleteLocalPhotos()
 }

@@ -6,14 +6,15 @@ import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.utils.PhotoMapper
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetPhotoUseCaseImpl @Inject constructor(
     private val photoRepository: PhotoRepository,
-    private val internetConnectionListener: InternetConnectionListener
+    private val internetConnectionListener: InternetConnectionListener,
+    private val dispatcherIO: CoroutineDispatcher
 ) : GetPhotoUseCase {
 
     override fun invoke(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
@@ -22,11 +23,7 @@ class GetPhotoUseCaseImpl @Inject constructor(
 
     private fun getRemotePhotos(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
         if (internetConnectionListener.isInternetAvailable()) {
-            if (isInitial) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    photoRepository.clearLocalPhotos()
-                }
-            }
+            initialDeleteLocalPhotos(isInitial)
             return photoRepository.getPhotos(page).map { response ->
                 PhotoMapper.mapToPhotoItemModel(response)
             }
@@ -36,6 +33,14 @@ class GetPhotoUseCaseImpl @Inject constructor(
                 return photoRepository.getLocalPhotos()
             }
             return Single.just(emptyList())
+        }
+    }
+
+    private fun initialDeleteLocalPhotos(isInitial: Boolean) {
+        if (isInitial) {
+            CoroutineScope(dispatcherIO).launch {
+                photoRepository.deleteLocalPhotos()
+            }
         }
     }
 }
