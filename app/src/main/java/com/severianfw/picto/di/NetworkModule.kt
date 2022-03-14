@@ -1,5 +1,7 @@
 package com.severianfw.picto.di
 
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import com.severianfw.picto.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
@@ -25,6 +27,16 @@ class NetworkModule {
     @Provides
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesNetworkRequest() : NetworkRequest {
+        return NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .build()
     }
 
 }

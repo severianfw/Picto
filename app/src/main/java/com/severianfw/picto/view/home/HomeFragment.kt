@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.severianfw.picto.PictoApplication
+import com.severianfw.picto.R
 import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
@@ -48,10 +49,20 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getInitialPhotos()
+        setupSwipeRefreshLayout()
         setupLoadingObserver()
         setupErrorObserver()
         setupPhotoRecyclerView()
         setupSearchView()
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        binding.srlPhotos.setOnRefreshListener {
+            homeViewModel.clearPhotos()
+            homeViewModel.isInitial = true
+            getInitialPhotos()
+            binding.srlPhotos.isRefreshing = false
+        }
     }
 
     private fun setupSearchView() {
@@ -74,15 +85,22 @@ class HomeFragment : Fragment() {
 
     private fun getInitialPhotos() {
         if (homeViewModel.isInitial) {
-            homeViewModel.getPhotos()
-            homeViewModel.isInitial = false
+            homeViewModel.apply {
+                pageNumber = 1
+                getPhotos()
+                isInitial = false
+            }
         }
     }
 
     private fun setupErrorObserver() {
         homeViewModel.hasError.observe(viewLifecycleOwner) { hasError ->
             if (hasError) {
-                Toast.makeText(activity, "Failed to call API!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity,
+                    getString(R.string.message_failed_get_photos),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

@@ -5,6 +5,6 @@ import io.reactivex.rxjava3.core.Single
 
 interface GetPhotoUseCase {
 
-    operator fun invoke(page: Int): Single<List<PhotoItemModel>>
+    operator fun invoke(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>>
 
 }

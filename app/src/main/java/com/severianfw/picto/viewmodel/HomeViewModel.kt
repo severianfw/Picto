@@ -33,18 +33,18 @@ class HomeViewModel @Inject constructor(
         get() = _hasError
 
     var isInitial: Boolean = true
+    var pageNumber: Int = 1
 
-    private var pageNumber: Int = 1
     private var isSearching = false
     private var photoName: String = ""
 
     private val compositeDisposable = CompositeDisposable()
 
     fun getPhotos() {
-        _isLoading.value = true
         compositeDisposable.add(
-            getPhotoUseCase(pageNumber).subscribeOn(Schedulers.io())
+            getPhotoUseCase(pageNumber, isInitial).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _isLoading.value = true }
                 .doFinally { _isLoading.value = false }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
@@ -72,10 +72,10 @@ class HomeViewModel @Inject constructor(
     fun searchPhotos(photoName: String) {
         this.photoName = photoName
         isSearching = true
-        _isLoading.value = true
         compositeDisposable.add(
             searchPhotoUseCase(pageNumber, photoName).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _isLoading.value = true }
                 .doFinally { _isLoading.value = false }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
