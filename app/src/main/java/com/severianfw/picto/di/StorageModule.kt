@@ -15,7 +15,7 @@ class StorageModule {
 
     @Singleton
     @Provides
-    fun providesRoomDatabase(context: Context) : PhotoRoomDatabase {
+    fun providesRoomDatabase(context: Context): PhotoRoomDatabase {
         return Room.databaseBuilder(
             context,
             PhotoRoomDatabase::class.java,
@@ -25,12 +25,8 @@ class StorageModule {
 
     @Singleton
     @Provides
-    fun providesPhotoDao(photoRoomDatabase: PhotoRoomDatabase) : PhotoDao {
+    fun providesPhotoDao(photoRoomDatabase: PhotoRoomDatabase): PhotoDao {
         return photoRoomDatabase.getPhotoDao()
     }
 
-    @Provides
-    fun providesDispatchersIO(): CoroutineDispatcher {
-        return Dispatchers.IO
-    }
 }

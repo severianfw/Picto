@@ -14,8 +14,7 @@ import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val photoDao: PhotoDao,
-    private val dispatcherIO: CoroutineDispatcher
+    private val photoDao: PhotoDao
 ) : PhotoRepository {
 
     companion object {
@@ -24,12 +23,10 @@ class PhotoRepositoryImpl @Inject constructor(
     }
 
     override fun getPhotos(page: Int): Single<List<PhotoResponse>> {
-        return apiService.getPhotos(CLIENT_ID, PAGE_SIZE, page).doOnSuccess {
-            CoroutineScope(dispatcherIO).launch {
-                val photos = PhotoMapper.mapToPhotoItemModel(it)
-                photoDao.insertPhotos(photos)
+        return apiService.getPhotos(CLIENT_ID, PAGE_SIZE, page)
+            .doOnSuccess { photo ->
+                photoDao.insertPhotos(PhotoMapper.mapToPhotoItemModel(photo))
             }
-        }
     }
 
     override fun searchPhotos(page: Int, photoName: String): Single<SearchPhotoResponse> {

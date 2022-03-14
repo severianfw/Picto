@@ -13,8 +13,7 @@ import javax.inject.Inject
 
 class GetPhotoUseCaseImpl @Inject constructor(
     private val photoRepository: PhotoRepository,
-    private val internetConnectionListener: InternetConnectionListener,
-    private val dispatcherIO: CoroutineDispatcher
+    private val internetConnectionListener: InternetConnectionListener
 ) : GetPhotoUseCase {
 
     override fun invoke(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
@@ -23,10 +22,9 @@ class GetPhotoUseCaseImpl @Inject constructor(
 
     private fun getRemotePhotos(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
         if (internetConnectionListener.isInternetAvailable()) {
-            initialDeleteLocalPhotos(isInitial)
-            return photoRepository.getPhotos(page).map { response ->
-                PhotoMapper.mapToPhotoItemModel(response)
-            }
+            return Single.fromCallable { initialDeleteLocalPhotos(isInitial) }
+                .flatMap { photoRepository.getPhotos(page) }
+                .map { response -> PhotoMapper.mapToPhotoItemModel(response) }
         } else {
             // ignore load more
             if (page == 1) {
@@ -38,9 +36,7 @@ class GetPhotoUseCaseImpl @Inject constructor(
 
     private fun initialDeleteLocalPhotos(isInitial: Boolean) {
         if (isInitial) {
-            CoroutineScope(dispatcherIO).launch {
-                photoRepository.deleteLocalPhotos()
-            }
+            photoRepository.deleteLocalPhotos()
         }
     }
 }
