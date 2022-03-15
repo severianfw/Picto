@@ -35,18 +35,20 @@ class SearchPhotoUseCaseTest {
 
     @Test
     fun `when invoke then result should be valid`() {
+        // Given
         val dummyPage = 1
         val dummyPhotoName = "photo_name"
         val dummySearchPhotoResponse =
             SearchPhotoResponse(results = listOf(PhotoResponse(id = "ID_1")))
-
         Mockito.`when`(photoRepository.searchPhotos(dummyPage, dummyPhotoName))
             .thenReturn(Single.just(dummySearchPhotoResponse))
         val dummyListPhotoItem = listOf(PhotoItemModel(id = "ID_1"))
 
+        //When
         val result = searchPhotoUseCaseImpl.invoke(dummyPage, dummyPhotoName).blockingGet()
-        Assert.assertEquals(result, dummyListPhotoItem)
 
+        // Then
+        Assert.assertEquals(result, dummyListPhotoItem)
         Mockito.verify(photoRepository).searchPhotos(dummyPage, dummyPhotoName)
     }
 }

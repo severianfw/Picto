@@ -11,16 +11,21 @@ import org.junit.Test
 class PhotoMapperTest {
 
     @Test
-    fun `when PhotoResponse fields are null`() {
+    fun `when mapToPhotoItemModel and PhotoResponse fields are null then result must be valid`() {
+        // Given
         val dummyPhotoResponse = PhotoResponse()
         val dummyPhotoItemModel = PhotoItemModel()
 
+        // When
         val result = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+
+        // Then
         Assert.assertEquals(result, listOf(dummyPhotoItemModel))
     }
 
     @Test
-    fun `when PhotoResponse fields have value`() {
+    fun `when mapToPhotoItemModel and PhotoResponse fields have value then result must be valid`() {
+        // Given
         val dummyPhotoResponse =
             PhotoResponse(
                 "desc",
@@ -34,7 +39,6 @@ class PhotoMapperTest {
                     profileImage = ProfileImage(medium = "url_profile")
                 )
             )
-
         val dummyPhotoItemModel =
             PhotoItemModel(
                 id = "id_photo",
@@ -45,7 +49,10 @@ class PhotoMapperTest {
                 authorName = "user_name"
             )
 
+        // When
         val result = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+
+        // Then
         Assert.assertEquals(result, listOf(dummyPhotoItemModel))
     }
 }
