@@ -114,8 +114,8 @@ class HomeViewModelTest : BaseViewModelTest() {
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
 
         // When
-        homeViewModel.photoName = dummyPhotoName
-        homeViewModel.isSearching = true
+        homeViewModel.setPhotoName(dummyPhotoName)
+        homeViewModel.setIsSearching(true)
         homeViewModel.loadMorePage()
 
         // Then
