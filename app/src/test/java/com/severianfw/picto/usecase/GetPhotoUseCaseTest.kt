@@ -39,19 +39,21 @@ class GetPhotoUseCaseTest {
     }
 
     @Test
-    fun testOnlineInvoke() {
+    fun `when invoke and has internet connection then result must be valid`() {
+        // Given
         val dummyPage = 1
         val dummyIsInitial = true
         val dummyPhotoResponse = PhotoResponse(id = "ID_1")
-
         Mockito.`when`(internetConnectionListener.isInternetAvailable()).thenReturn(true)
         Mockito.doNothing().`when`(photoRepository).deleteLocalPhotos()
-
         Mockito.`when`(photoRepository.getPhotos(dummyPage))
             .thenReturn(Single.just(listOf(dummyPhotoResponse)))
         val dummyListPhotoItemModel = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
 
+        // When
         val result = getPhotoUseCaseImpl.invoke(dummyPage, dummyIsInitial).blockingGet()
+
+        // Then
         Assert.assertEquals(result, dummyListPhotoItemModel)
 
         Mockito.verify(internetConnectionListener).isInternetAvailable()
@@ -60,34 +62,36 @@ class GetPhotoUseCaseTest {
     }
 
     @Test
-    fun testOfflineInvoke() {
+    fun `when invoke and no internet connection then result must be valid`() {
+        // Given
         val dummyPage = 1
         val dummyIsInitial = true
         val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
-
         Mockito.`when`(internetConnectionListener.isInternetAvailable()).thenReturn(false)
         Mockito.`when`(photoRepository.getLocalPhotos())
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
+
+        // When
         val result = getPhotoUseCaseImpl.invoke(dummyPage, dummyIsInitial).blockingGet()
 
+        // Then
         Assert.assertEquals(result, listOf(dummyPhotoItemModel))
-
         Mockito.verify(internetConnectionListener).isInternetAvailable()
         Mockito.verify(photoRepository).getLocalPhotos()
     }
 
     @Test
-    fun testOfflineInvokeIgnoreLoadMore() {
+    fun `when invoke, no internet connection, and page is greater than 1 then result must be empty list`() {
+        // Given
         val dummyPage = 2
         val dummyIsInitial = true
-
         Mockito.`when`(internetConnectionListener.isInternetAvailable()).thenReturn(false)
 
+        // When
         val result = getPhotoUseCaseImpl.invoke(dummyPage, dummyIsInitial).blockingGet()
-        Assert.assertEquals(result, emptyList<PhotoItemModel>())
 
+        // Then
+        Assert.assertEquals(result, emptyList<PhotoItemModel>())
         Mockito.verify(internetConnectionListener).isInternetAvailable()
     }
-
-
 }

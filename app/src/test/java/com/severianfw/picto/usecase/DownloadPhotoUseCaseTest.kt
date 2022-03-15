@@ -29,10 +29,15 @@ class DownloadPhotoUseCaseTest {
     }
 
     @Test
-    fun testInvoke() {
+    fun `when invoke then downloadPhoto must be executed`() {
+        // Given
         val dummyPhotoUrl = "test_url"
-        downloadPhotoUseCaseImpl.invoke(dummyPhotoUrl)
         Mockito.doNothing().`when`(downloadManagerHelper).downloadPhoto(dummyPhotoUrl)
+
+        // When
+        downloadPhotoUseCaseImpl.invoke(dummyPhotoUrl)
+
+        // Then
         Mockito.verify(downloadManagerHelper).downloadPhoto(dummyPhotoUrl)
     }
 }

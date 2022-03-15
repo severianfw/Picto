@@ -14,7 +14,6 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.doNothing
 import org.mockito.MockitoAnnotations
 
 class PhotoRepositoryTest {
@@ -40,21 +39,26 @@ class PhotoRepositoryTest {
     }
 
     @Test
-    fun testGetLocalPhotos() {
+    fun `when getLocalPhotos then result must be valid`() {
+        // Given
         val photoItemModel = PhotoItemModel("ID_1")
         Mockito.`when`(photoDao.getPhotos()).thenReturn(Single.just(listOf(photoItemModel)))
+
+        // When
         val result = photoRepositoryImpl.getLocalPhotos().blockingGet()
+
+        // Then
         Assert.assertEquals(result, listOf(photoItemModel))
         Mockito.verify(photoDao).getPhotos()
     }
 
     @Test
-    fun testSearchPhotos() {
+    fun `when searchPhotos then result must be valid`() {
+        // Given
         val dummyPage = 1
         val dummyPerPage = 10
         val dummyPhotoName = "photo_name"
         val dummyClientId = "eH_2mMyrCefjXtAmoudvsdfA6qdHD4ju6jF3yFkY5UU"
-
         Mockito.`when`(
             apiService.searchPhotos(
                 dummyClientId,
@@ -65,7 +69,11 @@ class PhotoRepositoryTest {
         ).thenReturn(
             Single.just(SearchPhotoResponse())
         )
+
+        // When
         val result = photoRepositoryImpl.searchPhotos(dummyPage, dummyPhotoName).blockingGet()
+
+        // Then
         Assert.assertEquals(result, SearchPhotoResponse())
         Mockito.verify(apiService).searchPhotos(
             dummyClientId,
@@ -76,29 +84,36 @@ class PhotoRepositoryTest {
     }
 
     @Test
-    fun testDeleteLocalPhotos() {
+    fun `when deleteLocalPhotos then deletePhotos must be executed`() {
+        // Given
+        Mockito.doNothing().`when`(photoDao).deletePhotos()
+
+        // When
         photoRepositoryImpl.deleteLocalPhotos()
-        doNothing().`when`(photoDao).deletePhotos()
+
+        // then
         Mockito.verify(photoDao).deletePhotos()
     }
 
     @Test
-    fun getPhotos() {
+    fun `when getPhotos then result must be valid`() {
+        // Given
         val dummyPage = 1
         val dummyPerPage = 10
         val dummyClientId = "eH_2mMyrCefjXtAmoudvsdfA6qdHD4ju6jF3yFkY5UU"
         val dummyPhotoResponse = PhotoResponse(id = "ID_1")
         val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
-
         Mockito.`when`(apiService.getPhotos(dummyClientId, dummyPerPage, dummyPage))
             .thenReturn(
                 Single.just(listOf(dummyPhotoResponse))
             )
+        Mockito.doNothing().`when`(photoDao).insertPhotos(listOf(dummyPhotoItemModel))
+
+        // When
         val result = photoRepositoryImpl.getPhotos(dummyPage).blockingGet()
+
+        // Then
         Assert.assertEquals(result, listOf(dummyPhotoResponse))
-
-        doNothing().`when`(photoDao).insertPhotos(listOf(dummyPhotoItemModel))
-
         Mockito.verify(photoDao).insertPhotos(listOf(dummyPhotoItemModel))
         Mockito.verify(apiService).getPhotos(
             dummyClientId,
@@ -106,6 +121,4 @@ class PhotoRepositoryTest {
             dummyPage
         )
     }
-
-
 }
