@@ -35,8 +35,8 @@ class HomeViewModel @Inject constructor(
     var isInitial: Boolean = true
     var pageNumber: Int = 1
 
-    private var isSearching = false
-    private var photoName: String = ""
+    var isSearching = false
+    var photoName: String = ""
 
     private val compositeDisposable = CompositeDisposable()
 
