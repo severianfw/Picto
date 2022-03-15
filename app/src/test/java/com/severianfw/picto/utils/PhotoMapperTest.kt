@@ -11,7 +11,16 @@ import org.junit.Test
 class PhotoMapperTest {
 
     @Test
-    fun mapToPhotoItemModelTest() {
+    fun `when PhotoResponse fields are null`() {
+        val dummyPhotoResponse = PhotoResponse()
+        val dummyPhotoItemModel = PhotoItemModel()
+
+        val result = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+        Assert.assertEquals(result, listOf(dummyPhotoItemModel))
+    }
+
+    @Test
+    fun `when PhotoResponse fields have value`() {
         val dummyPhotoResponse =
             PhotoResponse(
                 "desc",

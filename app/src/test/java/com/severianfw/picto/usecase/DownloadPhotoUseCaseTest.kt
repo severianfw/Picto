@@ -8,7 +8,6 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.doNothing
 import org.mockito.MockitoAnnotations
 
 class DownloadPhotoUseCaseTest {
@@ -33,7 +32,7 @@ class DownloadPhotoUseCaseTest {
     fun testInvoke() {
         val dummyPhotoUrl = "test_url"
         downloadPhotoUseCaseImpl.invoke(dummyPhotoUrl)
-        doNothing().`when`(downloadManagerHelper).downloadPhoto(dummyPhotoUrl)
+        Mockito.doNothing().`when`(downloadManagerHelper).downloadPhoto(dummyPhotoUrl)
         Mockito.verify(downloadManagerHelper).downloadPhoto(dummyPhotoUrl)
     }
 }

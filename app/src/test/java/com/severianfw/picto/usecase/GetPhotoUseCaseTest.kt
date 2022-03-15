@@ -14,7 +14,6 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.doNothing
 import org.mockito.MockitoAnnotations
 
 class GetPhotoUseCaseTest {
@@ -46,7 +45,7 @@ class GetPhotoUseCaseTest {
         val dummyPhotoResponse = PhotoResponse(id = "ID_1")
 
         Mockito.`when`(internetConnectionListener.isInternetAvailable()).thenReturn(true)
-        doNothing().`when`(photoRepository).deleteLocalPhotos()
+        Mockito.doNothing().`when`(photoRepository).deleteLocalPhotos()
 
         Mockito.`when`(photoRepository.getPhotos(dummyPage))
             .thenReturn(Single.just(listOf(dummyPhotoResponse)))

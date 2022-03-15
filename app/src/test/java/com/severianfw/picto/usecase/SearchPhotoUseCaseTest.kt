@@ -34,7 +34,7 @@ class SearchPhotoUseCaseTest {
     }
 
     @Test
-    fun testInvoke() {
+    fun `when invoke then result should be valid`() {
         val dummyPage = 1
         val dummyPhotoName = "photo_name"
         val dummySearchPhotoResponse =
