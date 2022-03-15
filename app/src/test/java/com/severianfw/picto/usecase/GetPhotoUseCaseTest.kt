@@ -94,6 +94,4 @@ class GetPhotoUseCaseTest {
         Assert.assertEquals(result, emptyList<PhotoItemModel>())
         Mockito.verify(internetConnectionListener).isInternetAvailable()
     }
-
-
 }

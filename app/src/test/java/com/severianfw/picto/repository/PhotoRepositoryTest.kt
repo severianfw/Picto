@@ -121,6 +121,4 @@ class PhotoRepositoryTest {
             dummyPage
         )
     }
-
-
 }
