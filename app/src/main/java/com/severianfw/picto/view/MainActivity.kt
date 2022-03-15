@@ -4,17 +4,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
+import com.severianfw.picto.data.repository.DarkModeRepository
 import com.severianfw.picto.databinding.ActivityMainBinding
 import com.severianfw.picto.utils.DarkModeUtil
 import com.severianfw.picto.view.home.HomeFragment
 import com.severianfw.picto.view.home.SettingsBottomSheetDialogFragment
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
+
+    @Inject
+    lateinit var darkModeRepository: DarkModeRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -24,8 +30,17 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
         setupToolbar()
+        setupDarkMode()
 
         showHomeFragment()
+    }
+
+    private fun setupDarkMode() {
+        if (darkModeRepository.isDarkModeActive()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
