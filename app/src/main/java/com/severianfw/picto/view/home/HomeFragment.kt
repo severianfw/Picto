@@ -7,16 +7,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding4.appcompat.query
+import com.jakewharton.rxbinding4.appcompat.queryTextChanges
+import com.jakewharton.rxbinding4.widget.textChangeEvents
+import com.jakewharton.rxbinding4.widget.textChanges
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
 import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
 import com.severianfw.picto.viewmodel.HomeViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -58,29 +67,27 @@ class HomeFragment : Fragment() {
 
     private fun setupSwipeRefreshLayout() {
         binding.srlPhotos.setOnRefreshListener {
-            homeViewModel.clearPhotos()
-            homeViewModel.setIsInitial(true)
+            homeViewModel.apply {
+                clearPhotos()
+                setIsInitial(true)
+                setIsSearching(false)
+            }
             getInitialPhotos()
             binding.srlPhotos.isRefreshing = false
         }
     }
 
     private fun setupSearchView() {
-        binding.svPhotos.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(text: String?): Boolean {
-                text?.let {
-                    homeViewModel.clearPhotos()
-                    homeViewModel.searchPhotos(text)
-                    return true
+        binding.svPhotos.isSubmitButtonEnabled = false
+        binding.svPhotos.queryTextChanges().debounce(1, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                if (it.isNotEmpty()) {
+                    homeViewModel.apply {
+                        clearPhotos()
+                        searchPhotos(it.toString())
+                    }
                 }
-                return false
             }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                return true
-            }
-
-        })
     }
 
     private fun getInitialPhotos() {
