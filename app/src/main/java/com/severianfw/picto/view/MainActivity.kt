@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
-import com.severianfw.picto.data.repository.DarkModeRepository
 import com.severianfw.picto.databinding.ActivityMainBinding
 import com.severianfw.picto.utils.DarkModeUtil
 import com.severianfw.picto.view.home.HomeFragment
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
 
     @Inject
-    lateinit var darkModeRepository: DarkModeRepository
+    lateinit var darkModeUtil: DarkModeUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDarkMode() {
-        if (darkModeRepository.isDarkModeActive()) {
+        if (darkModeUtil.isDarkModeActive()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        if (DarkModeUtil.isDarkModeActive(resources)) {
+        if (darkModeUtil.isDarkModeActive()) {
             val item = menu.findItem(R.id.menu_settings)
             item.icon.setTint(ContextCompat.getColor(this, R.color.white_500))
         }

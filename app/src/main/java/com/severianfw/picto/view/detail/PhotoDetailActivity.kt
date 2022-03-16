@@ -2,6 +2,7 @@ package com.severianfw.picto.view.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
@@ -16,6 +17,9 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     @Inject
     lateinit var photoDetailViewModel: PhotoDetailViewModel
+
+    @Inject
+    lateinit var darkModeUtil: DarkModeUtil
 
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
@@ -36,7 +40,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun setupIconColor() {
-        if (DarkModeUtil.isDarkModeActive(resources)) {
+        if (darkModeUtil.isDarkModeActive()) {
             Glide.with(this).load(R.drawable.ic_back_dark).into(binding.btnBack)
             Glide.with(this).load(R.drawable.ic_download_dark).into(binding.btnDownload)
         } else {
@@ -55,6 +59,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.btnDownload.setOnClickListener {
             if (photoItem != null) {
                 photoDetailViewModel.downloadPhoto(photoItem.mainImageUri)
+                Toast.makeText(this, "Downloading photo", Toast.LENGTH_SHORT).show()
             }
         }
     }

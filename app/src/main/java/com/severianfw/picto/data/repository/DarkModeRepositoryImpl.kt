@@ -10,7 +10,7 @@ class DarkModeRepositoryImpl @Inject constructor(
 ) : DarkModeRepository {
 
     private fun getDarkModeSharedPreference(): SharedPreferences {
-        return context.getSharedPreferences(Constant.SP_DARK_MODE, Context.MODE_PRIVATE)
+        return context.getSharedPreferences(Constant.DARK_MODE, Context.MODE_PRIVATE)
     }
 
     override fun isDarkModeActive(): Boolean {
