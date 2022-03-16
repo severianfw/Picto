@@ -2,6 +2,8 @@ package com.severianfw.picto.di
 
 import com.severianfw.picto.connectionlistener.InternetConnectionListener
 import com.severianfw.picto.connectionlistener.InternetConnectionListenerImpl
+import com.severianfw.picto.data.repository.DarkModeRepository
+import com.severianfw.picto.data.repository.DarkModeRepositoryImpl
 import com.severianfw.picto.data.repository.PhotoRepository
 import com.severianfw.picto.data.repository.PhotoRepositoryImpl
 import com.severianfw.picto.domain.usecase.*
@@ -40,5 +42,9 @@ abstract class AppModule {
     @Singleton
     @Binds
     abstract fun bindsInternetConnectionListener(internetConnectionListenerImpl: InternetConnectionListenerImpl): InternetConnectionListener
+
+    @Singleton
+    @Binds
+    abstract fun bindsDarkModeRepository(darkModeRepositoryImpl: DarkModeRepositoryImpl): DarkModeRepository
 
 }

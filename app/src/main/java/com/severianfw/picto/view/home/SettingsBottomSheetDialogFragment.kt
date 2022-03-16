@@ -10,11 +10,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.databinding.BottomSheetSettingsBinding
 import com.severianfw.picto.utils.DarkModeUtil
+import javax.inject.Inject
 
 class SettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var darkModeUtil: DarkModeUtil
 
     companion object {
         const val TAG = "SettingsBottomSheetFragment"
@@ -29,20 +33,28 @@ class SettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity?.applicationContext as PictoApplication).appComponent.inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkDarkMode()
     }
 
     private fun checkDarkMode() {
-        if (DarkModeUtil.isDarkModeActive(resources)) {
+        if (darkModeUtil.isDarkModeActive()) {
             binding.scToggleMode.isChecked = true
         }
         binding.scToggleMode.setOnCheckedChangeListener { button, _ ->
             if (button.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                darkModeUtil.setDarkModeStatus(true)
+
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                darkModeUtil.setDarkModeStatus(false)
 
             }
         }

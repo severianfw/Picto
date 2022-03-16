@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             android:background="@null"
             android:contentDescription="@string/back_button"
             android:scaleType="center"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +32,7 @@
             android:layout_marginEnd="@dimen/dp_24"
             android:background="@null"
             android:contentDescription="@string/download_button"
-            android:src="@drawable/ic_download"
+            android:src="@drawable/ic_download_light"
             app:layout_constraintBottom_toBottomOf="@+id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_back" />

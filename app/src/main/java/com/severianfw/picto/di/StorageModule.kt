@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.severianfw.picto.data.local.PhotoDao
 import com.severianfw.picto.data.local.PhotoRoomDatabase
+import com.severianfw.picto.data.repository.DarkModeRepository
+import com.severianfw.picto.utils.DarkModeUtil
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -29,4 +29,9 @@ class StorageModule {
         return photoRoomDatabase.getPhotoDao()
     }
 
+    @Singleton
+    @Provides
+    fun providesDarkModeUtil(darkModeRepository: DarkModeRepository): DarkModeUtil {
+        return DarkModeUtil(darkModeRepository)
+    }
 }

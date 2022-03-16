@@ -1,12 +1,15 @@
 package com.severianfw.picto.utils
 
-import android.content.res.Configuration
-import android.content.res.Resources
+import com.severianfw.picto.data.repository.DarkModeRepository
+import javax.inject.Inject
 
-object DarkModeUtil {
+class DarkModeUtil @Inject constructor(private val darkModeRepository: DarkModeRepository) {
 
-    fun isDarkModeActive(resources: Resources): Boolean {
-        val currentDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return currentDarkMode == Configuration.UI_MODE_NIGHT_YES
+    fun isDarkModeActive(): Boolean {
+        return darkModeRepository.isDarkModeActive()
+    }
+
+    fun setDarkModeStatus(isDarkMode: Boolean) {
+        darkModeRepository.setDarkModeStatus(isDarkMode)
     }
 }
