@@ -32,13 +32,23 @@ class HomeViewModel @Inject constructor(
     val hasError: LiveData<Boolean>
         get() = _hasError
 
-    var isInitial: Boolean = true
-    var pageNumber: Int = 1
+    private var isInitial: Boolean = true
+    private var pageNumber: Int = 1
 
     private var isSearching = false
     private var photoName: String = ""
 
     private val compositeDisposable = CompositeDisposable()
+
+    fun setIsInitial(isInitial: Boolean) {
+        this.isInitial = isInitial
+    }
+
+    fun getIsInitial(): Boolean = this.isInitial
+
+    fun setPageNumber(pageNumber: Int) {
+        this.pageNumber = pageNumber
+    }
 
     fun setIsSearching(isSearching: Boolean) {
         this.isSearching = isSearching
