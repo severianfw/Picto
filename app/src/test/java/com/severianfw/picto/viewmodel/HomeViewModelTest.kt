@@ -92,7 +92,7 @@ class HomeViewModelTest : BaseViewModelTest() {
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
 
         // When
-        homeViewModel.isInitial = false
+        homeViewModel.setIsInitial(false)
         homeViewModel.loadMorePage()
 
         // Then
