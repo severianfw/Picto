@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
     private fun setupSwipeRefreshLayout() {
         binding.srlPhotos.setOnRefreshListener {
             homeViewModel.clearPhotos()
-            homeViewModel.isInitial = true
+            homeViewModel.setIsInitial(true)
             getInitialPhotos()
             binding.srlPhotos.isRefreshing = false
         }
@@ -84,11 +84,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun getInitialPhotos() {
-        if (homeViewModel.isInitial) {
+        if (homeViewModel.getIsInitial()) {
             homeViewModel.apply {
-                pageNumber = 1
+                setPageNumber(1)
                 getPhotos()
-                isInitial = false
+                setIsInitial(false)
             }
         }
     }
