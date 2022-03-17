@@ -99,6 +99,7 @@ class HomeViewModel @Inject constructor(
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
                         _photos.value = _photos.value.orEmpty().plus(newPhotos)
+                        _hasError.value = false
                     }
 
                     override fun onError(e: Throwable) {
