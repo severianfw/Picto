@@ -12,6 +12,8 @@
     <string name="default_description">No Description</string>
     <string name="download_title">Unsplash photo</string>
     <string name="download_description">Unsplash photo</string>
+    <string name="download_start">Downloading photo</string>
+    <string name="download_finish">Download complete</string>
     <string name="message_failed_get_photos">Failed to get photo</string>
     <string name="search_photos">Search Photos</string>
 </resources>

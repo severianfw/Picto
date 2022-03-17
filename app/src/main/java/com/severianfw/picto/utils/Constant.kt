@@ -6,5 +6,6 @@ class Constant {
         const val PHOTO_ITEM = "PHOTO_ITEM"
         const val DARK_MODE = "DARK_MODE"
         const val DARK_MODE_STATUS = "DARK_MODE_STATUS"
+        const val DEBOUNCE_TIME = 1L
     }
 }

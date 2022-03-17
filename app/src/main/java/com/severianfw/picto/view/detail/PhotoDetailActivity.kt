@@ -1,5 +1,10 @@
 package com.severianfw.picto.view.detail
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -37,6 +42,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         setPhotoData(photoItem)
         setBackButtonListener()
         setDownloadButtonListener(photoItem)
+        setupDownloadReceiver()
     }
 
     private fun setupIconColor() {
@@ -55,11 +61,24 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
     }
 
+    private val onDownloadCompleted = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Toast.makeText(context, getString(R.string.download_finish), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupDownloadReceiver() {
+        registerReceiver(
+            onDownloadCompleted,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
+    }
+
     private fun setDownloadButtonListener(photoItem: PhotoItemModel?) {
         binding.btnDownload.setOnClickListener {
             if (photoItem != null) {
                 photoDetailViewModel.downloadPhoto(photoItem.mainImageUri)
-                Toast.makeText(this, "Downloading photo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.download_start), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -80,5 +99,10 @@ class PhotoDetailActivity : AppCompatActivity() {
                     .into(ivUserProfilePicture)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(onDownloadCompleted)
     }
 }
