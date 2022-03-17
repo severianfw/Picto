@@ -41,6 +41,7 @@ dependencies {
 
     def retrofitVersion = "2.9.0"
     def rxVersion = "3.0.0"
+    def rxBindingVersion = "4.0.0"
     def daggerVersion = "2.40"
     def roomVersion = "2.4.2"
 
@@ -71,6 +72,8 @@ dependencies {
     // Rx
     implementation "io.reactivex.rxjava3:rxandroid:$rxVersion"
     implementation "io.reactivex.rxjava3:rxjava:$rxVersion"
+    implementation "com.jakewharton.rxbinding4:rxbinding:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding4:rxbinding-appcompat:$rxBindingVersion"
 
     // Dagger
     implementation "com.google.dagger:dagger:$daggerVersion"

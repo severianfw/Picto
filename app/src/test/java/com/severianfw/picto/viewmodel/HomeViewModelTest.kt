@@ -126,5 +126,24 @@ class HomeViewModelTest : BaseViewModelTest() {
         Mockito.verify(searchPhotoUseCase).invoke(dummyPageNumber, dummyPhotoName)
     }
 
+    @Test
+    fun `when success get photo then has error value must be false`() {
+        // Given
+        val dummyPageNumber = 1
+        val dummyIsInitial = true
+        val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
+        Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
+            .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
+
+        // When
+        homeViewModel.getPhotos()
+
+        // Then
+        homeViewModel.photos.observeForTesting {
+            val actual = homeViewModel.hasError.value
+            Assert.assertEquals(actual, false)
+        }
+        Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
+    }
 
 }
