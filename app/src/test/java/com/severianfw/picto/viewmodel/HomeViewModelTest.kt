@@ -126,5 +126,25 @@ class HomeViewModelTest : BaseViewModelTest() {
         Mockito.verify(searchPhotoUseCase).invoke(dummyPageNumber, dummyPhotoName)
     }
 
+    @Test
+    fun `when clear photos, then photos must be empty`() {
+        // Given
+        val dummyPageNumber = 1
+        val dummyIsInitial = true
+        val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
+        Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
+            .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
+        homeViewModel.getPhotos()
+
+        // When
+        homeViewModel.clearPhotos()
+
+        // Then
+        homeViewModel.photos.observeForTesting {
+            val actual = homeViewModel.photos.value
+            Assert.assertEquals(actual, emptyList<PhotoItemModel>())
+        }
+        Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
+    }
 
 }
