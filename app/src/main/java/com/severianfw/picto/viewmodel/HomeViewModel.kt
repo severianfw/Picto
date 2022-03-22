@@ -46,6 +46,8 @@ class HomeViewModel @Inject constructor(
 
     fun getIsInitial(): Boolean = this.isInitial
 
+    fun getPageNumber() = this.pageNumber
+
     fun setPageNumber(pageNumber: Int) {
         this.pageNumber = pageNumber
     }

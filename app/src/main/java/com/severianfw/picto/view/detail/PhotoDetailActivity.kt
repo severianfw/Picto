@@ -17,7 +17,6 @@ import com.severianfw.picto.viewmodel.PhotoDetailViewModel
 import javax.inject.Inject
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.utils.DarkModeUtil
-import com.severianfw.picto.utils.ImageLoader
 
 class PhotoDetailActivity : AppCompatActivity() {
 
@@ -48,27 +47,11 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun setupIconColor() {
         if (darkModeUtil.isDarkModeActive()) {
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_back_dark,
-                binding.btnBack
-            )
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_download_dark,
-                binding.btnDownload
-            )
+            binding.btnBack.setImageResource(R.drawable.ic_back_dark)
+            binding.btnDownload.setImageResource(R.drawable.ic_download_dark)
         } else {
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_back_light,
-                binding.btnBack
-            )
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_download_light,
-                binding.btnDownload
-            )
+            binding.btnBack.setImageResource(R.drawable.ic_back_light)
+            binding.btnDownload.setImageResource(R.drawable.ic_download_light)
         }
     }
 

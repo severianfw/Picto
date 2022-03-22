@@ -20,7 +20,7 @@ class PhotoAdapter(private inline val onClick: (photoItem: PhotoItemModel) -> Un
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(photo: PhotoItemModel) {
-            ImageLoader.loadUrlToImageView(binding, photo.thumbnailImageUri)
+            ImageLoader.loadUrlToImageView(itemView.context, photo.thumbnailImageUri, binding.ivPhoto)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.severianfw.picto.viewmodel
 
+import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import java.io.IOException
 
 class HomeViewModelTest : BaseViewModelTest() {
 
@@ -92,13 +94,14 @@ class HomeViewModelTest : BaseViewModelTest() {
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
 
         // When
+        `when getPhotos then result should be valid`()
         homeViewModel.setIsInitial(false)
         homeViewModel.loadMorePage()
 
         // Then
         homeViewModel.photos.observeForTesting {
             val actual = homeViewModel.photos.value
-            Assert.assertEquals(actual, listOf(dummyPhotoItemModel))
+            Assert.assertEquals(actual, listOf(dummyPhotoItemModel, dummyPhotoItemModel))
         }
         Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
 
@@ -124,6 +127,29 @@ class HomeViewModelTest : BaseViewModelTest() {
             Assert.assertEquals(actual, listOf(dummyPhotoItemModel))
         }
         Mockito.verify(searchPhotoUseCase).invoke(dummyPageNumber, dummyPhotoName)
+    }
+
+    @Test
+    fun `when load more page and has error, then page number must not be added by 1`() {
+        // Given
+        val dummyPageNumber = 2
+        val dummyIsInitial = false
+        Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
+            .thenReturn(Single.error(IOException()))
+
+        // When
+        `when getPhotos then result should be valid`()
+        homeViewModel.setIsInitial(false)
+        homeViewModel.loadMorePage()
+
+        // Then
+        homeViewModel.hasError.observeForTesting {
+            val actual = homeViewModel.hasError.value
+            Assert.assertEquals(actual, true)
+        }
+        val pageNumber = homeViewModel.getPageNumber()
+        Assert.assertEquals(pageNumber, dummyPageNumber)
+        Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
     }
 
     @Test

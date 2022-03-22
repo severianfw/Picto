@@ -1,6 +1,6 @@
 package com.severianfw.picto.utils
 
-import com.severianfw.picto.data.local.PhotoEntity
+import com.severianfw.picto.data.local.entity.PhotoEntity
 import com.severianfw.picto.data.remote.ImageUrl
 import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.data.remote.ProfileImage

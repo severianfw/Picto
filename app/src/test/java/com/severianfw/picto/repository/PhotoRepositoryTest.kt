@@ -2,14 +2,12 @@ package com.severianfw.picto.repository
 
 import com.severianfw.picto.connectionlistener.InternetConnectionListener
 import com.severianfw.picto.data.local.PhotoDao
-import com.severianfw.picto.data.local.PhotoEntity
+import com.severianfw.picto.data.local.entity.PhotoEntity
 import com.severianfw.picto.data.remote.ApiService
 import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.data.remote.SearchPhotoResponse
 import com.severianfw.picto.data.repository.PhotoRepositoryImpl
 import com.severianfw.picto.data.repository.PhotoState
-import com.severianfw.picto.domain.model.PhotoItemModel
-import com.severianfw.picto.utils.PhotoMapper
 import io.reactivex.rxjava3.core.Single
 import org.junit.After
 import org.junit.Assert

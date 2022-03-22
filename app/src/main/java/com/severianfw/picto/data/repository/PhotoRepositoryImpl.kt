@@ -22,7 +22,7 @@ class PhotoRepositoryImpl @Inject constructor(
     override fun getPhotos(page: Int, isInitial: Boolean): Single<PhotoState> {
         return if (internetConnectionListener.isInternetAvailable()) {
             Single.fromCallable { initialDeleteLocalPhotos(isInitial) }
-                .flatMap { getPhotosFromApi(page) }
+                .flatMap { getPhotosFromRemote(page) }
         } else {
             getLocalPhotos(page)
         }
@@ -34,13 +34,13 @@ class PhotoRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPhotosFromApi(page: Int): Single<PhotoState> {
+    override fun getPhotosFromRemote(page: Int): Single<PhotoState.PhotoRemoteModel> {
         return apiService.getPhotos(CLIENT_ID, PAGE_SIZE, page)
-            .doOnSuccess { photo ->
-                photoDao.insertPhotos(PhotoMapper.mapResponseToPhotoEntity(photo))
-            }
             .map { response ->
                 PhotoState.PhotoRemoteModel(response)
+            }
+            .doOnSuccess { photo ->
+                photoDao.insertPhotos(PhotoMapper.mapResponseToPhotoEntity(photo.photos))
             }
     }
 
