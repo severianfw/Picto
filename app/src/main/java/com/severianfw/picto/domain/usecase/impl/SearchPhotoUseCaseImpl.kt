@@ -13,7 +13,7 @@ class SearchPhotoUseCaseImpl @Inject constructor(
 
     override fun invoke(page: Int, photoName: String): Single<List<PhotoItemModel>> {
         return photoRepository.searchPhotos(page, photoName).map { response ->
-            PhotoMapper.mapToPhotoItemModel(response.results.orEmpty())
+            PhotoMapper.mapResponseToPhotoItemModel(response.results.orEmpty())
         }
     }
 }

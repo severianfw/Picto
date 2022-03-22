@@ -1,25 +1,13 @@
 package com.severianfw.picto.view.home
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.FitCenter
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.severianfw.picto.R
 import com.severianfw.picto.databinding.ItemPhotosBinding
 import com.severianfw.picto.domain.model.PhotoItemModel
+import com.severianfw.picto.utils.ImageLoader
 
 class PhotoAdapter(private inline val onClick: (photoItem: PhotoItemModel) -> Unit) :
     ListAdapter<PhotoItemModel, PhotoAdapter.ViewHolder>(PhotoItemDiffCallback()) {
@@ -32,13 +20,7 @@ class PhotoAdapter(private inline val onClick: (photoItem: PhotoItemModel) -> Un
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(photo: PhotoItemModel) {
-            val requestOptions = RequestOptions().placeholder(R.drawable.ic_default_image)
-            Glide.with(binding.root)
-                .load(photo.thumbnailImageUri)
-                .transform(FitCenter(), CenterCrop(), RoundedCorners(CORNERS_RADIUS))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .apply(requestOptions)
-                .into(binding.ivPhoto)
+            ImageLoader.loadUrlToImageView(binding, photo.thumbnailImageUri)
         }
     }
 

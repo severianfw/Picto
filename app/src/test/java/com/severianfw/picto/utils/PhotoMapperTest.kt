@@ -17,7 +17,7 @@ class PhotoMapperTest {
         val dummyPhotoItemModel = PhotoItemModel()
 
         // When
-        val result = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+        val result = PhotoMapper.mapResponseToPhotoItemModel(listOf(dummyPhotoResponse))
 
         // Then
         Assert.assertEquals(result, listOf(dummyPhotoItemModel))
@@ -50,7 +50,7 @@ class PhotoMapperTest {
             )
 
         // When
-        val result = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+        val result = PhotoMapper.mapResponseToPhotoItemModel(listOf(dummyPhotoResponse))
 
         // Then
         Assert.assertEquals(result, listOf(dummyPhotoItemModel))

@@ -80,7 +80,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMorePage() {
-        pageNumber += 1
+        if (_hasError.value == false) {
+            pageNumber += 1
+        }
         if (isSearching) {
             searchPhotos(photoName)
         } else {

@@ -48,7 +48,7 @@ class GetPhotoUseCaseTest {
         Mockito.doNothing().`when`(photoRepository).deleteLocalPhotos()
         Mockito.`when`(photoRepository.getPhotos(dummyPage))
             .thenReturn(Single.just(listOf(dummyPhotoResponse)))
-        val dummyListPhotoItemModel = PhotoMapper.mapToPhotoItemModel(listOf(dummyPhotoResponse))
+        val dummyListPhotoItemModel = PhotoMapper.mapResponseToPhotoItemModel(listOf(dummyPhotoResponse))
 
         // When
         val result = getPhotoUseCaseImpl.invoke(dummyPage, dummyIsInitial).blockingGet()

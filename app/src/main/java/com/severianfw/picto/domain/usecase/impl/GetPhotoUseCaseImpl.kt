@@ -1,42 +1,33 @@
 package com.severianfw.picto.domain.usecase.impl
 
-import com.severianfw.picto.connectionlistener.InternetConnectionListener
 import com.severianfw.picto.data.repository.PhotoRepository
+import com.severianfw.picto.data.repository.PhotoState
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
 import com.severianfw.picto.utils.PhotoMapper
 import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GetPhotoUseCaseImpl @Inject constructor(
-    private val photoRepository: PhotoRepository,
-    private val internetConnectionListener: InternetConnectionListener
+    private val photoRepository: PhotoRepository
 ) : GetPhotoUseCase {
 
     override fun invoke(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
-        return getRemotePhotos(page, isInitial)
+        return getPhotoItemModel(page, isInitial)
     }
 
-    private fun getRemotePhotos(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
-        if (internetConnectionListener.isInternetAvailable()) {
-            return Single.fromCallable { initialDeleteLocalPhotos(isInitial) }
-                .flatMap { photoRepository.getPhotos(page) }
-                .map { response -> PhotoMapper.mapToPhotoItemModel(response) }
-        } else {
-            // ignore load more
-            if (page == 1) {
-                return photoRepository.getLocalPhotos()
+    private fun getPhotoItemModel(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
+        return photoRepository.getPhotos(page, isInitial)
+            .map { photoState ->
+                when (photoState) {
+                    is PhotoState.PhotoRemoteModel -> {
+                        return@map PhotoMapper.mapResponseToPhotoItemModel(photoState.photos)
+                    }
+                    is PhotoState.PhotoLocalModel -> {
+                        return@map PhotoMapper.mapPhotoEntityToPhotoItemModel(photoState.photos)
+                    }
+                }
             }
-            return Single.just(emptyList())
-        }
     }
 
-    private fun initialDeleteLocalPhotos(isInitial: Boolean) {
-        if (isInitial) {
-            photoRepository.deleteLocalPhotos()
-        }
-    }
 }
