@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
@@ -47,11 +48,31 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun setupIconColor() {
         if (darkModeUtil.isDarkModeActive()) {
-            binding.btnBack.setImageResource(R.drawable.ic_back_dark)
-            binding.btnDownload.setImageResource(R.drawable.ic_download_dark)
+            binding.btnBack.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_back_dark
+                )
+            )
+            binding.btnDownload.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_download_dark
+                )
+            )
         } else {
-            binding.btnBack.setImageResource(R.drawable.ic_back_light)
-            binding.btnDownload.setImageResource(R.drawable.ic_download_light)
+            binding.btnBack.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_back_light
+                )
+            )
+            binding.btnDownload.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_download_light
+                )
+            )
         }
     }
 
