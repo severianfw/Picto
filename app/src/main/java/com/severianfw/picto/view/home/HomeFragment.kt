@@ -3,11 +3,14 @@ package com.severianfw.picto.view.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding4.appcompat.queryTextChanges
@@ -17,6 +20,7 @@ import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
 import com.severianfw.picto.viewmodel.HomeViewModel
+import com.severianfw.picto.viewmodel.ViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
@@ -30,6 +34,8 @@ class HomeFragment : Fragment() {
     private var compositeDisposable = CompositeDisposable()
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var homeViewModel: HomeViewModel
 
     companion object {
@@ -47,10 +53,13 @@ class HomeFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity?.applicationContext as PictoApplication).appComponent.inject(this)
+//        Log.d("LIFECYCLE", "OnAttach")
+        setupViewModel()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("LIFECYCLE", "OnViewCreated")
 
         getInitialPhotos()
         setupSwipeRefreshLayout()
@@ -58,6 +67,20 @@ class HomeFragment : Fragment() {
         setupErrorObserver()
         setupPhotoRecyclerView()
         setupSearchView()
+    }
+
+//    override fun onDetach() {
+//        super.onDetach()
+//        Log.d("LIFECYCLE", "onDetach")
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        Log.d("LIFECYCLE", "onDestroy")
+//    }
+
+    private fun setupViewModel() {
+        homeViewModel = ViewModelProvider(this, viewModelFactory)[HomeViewModel::class.java]
     }
 
     private fun setupSwipeRefreshLayout() {
@@ -82,6 +105,7 @@ class HomeFragment : Fragment() {
                 setPageNumber(1)
                 getPhotos()
                 setIsInitial(false)
+//                Log.d("TEST", "MASUK INITIAL")
             }
         }
     }
@@ -151,6 +175,9 @@ class HomeFragment : Fragment() {
             }
         })
         homeViewModel.photos.observe(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                Log.d("PHOTOS", it[0].toString())
+//            }
             photoAdapter.submitList(it.toList())
         }
     }

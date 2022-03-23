@@ -66,11 +66,13 @@ class HomeViewModel @Inject constructor(
                 .doFinally { _isLoading.value = false }
                 .subscribeWith(object : DisposableSingleObserver<List<PhotoItemModel>>() {
                     override fun onSuccess(newPhotos: List<PhotoItemModel>) {
+                        Log.d("VM_STATUS", "onSuccess")
                         _photos.value = _photos.value.orEmpty().plus(newPhotos)
                         _hasError.value = false
                     }
 
                     override fun onError(e: Throwable) {
+                        Log.d("VM_STATUS", "onError")
                         Log.d("MESSAGE", e.message.toString())
                         _hasError.value = true
                     }
@@ -119,6 +121,7 @@ class HomeViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        Log.d("VM_STATUS", "MASUK onCleared")
         compositeDisposable.clear()
     }
 

@@ -44,6 +44,7 @@ dependencies {
     def rxBindingVersion = "4.0.0"
     def daggerVersion = "2.40"
     def roomVersion = "2.4.2"
+    def lifecycle_version = '2.2.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -91,4 +92,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava3:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 }
