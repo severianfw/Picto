@@ -1,5 +1,7 @@
 package com.severianfw.picto.usecase
 
+import com.severianfw.picto.data.local.entity.PhotoEntity
+import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.data.repository.PhotoRepository
 import com.severianfw.picto.data.repository.PhotoState
 import com.severianfw.picto.domain.usecase.impl.GetPhotoUseCaseImpl
@@ -37,7 +39,8 @@ class GetPhotoUseCaseTest {
         // Given
         val dummyPage = 1
         val dummyIsInitial = true
-        val dummyPhotoState = PhotoState.PhotoRemoteModel(listOf())
+        val dummyPhotoResponse = PhotoResponse(id = "ID_1")
+        val dummyPhotoState = PhotoState.PhotoRemoteModel(listOf(dummyPhotoResponse))
         Mockito.`when`(photoRepository.getPhotos(dummyPage, dummyIsInitial))
             .thenReturn(Single.just(dummyPhotoState))
         val dummyPhotoItemModel = PhotoMapper.mapResponseToPhotoItemModel(dummyPhotoState.photos)
@@ -56,7 +59,8 @@ class GetPhotoUseCaseTest {
         // Given
         val dummyPage = 1
         val dummyIsInitial = true
-        val dummyPhotoState = PhotoState.PhotoLocalModel(listOf())
+        val dummyPhotoEntity = PhotoEntity(id = "ID_1")
+        val dummyPhotoState = PhotoState.PhotoLocalModel(listOf(dummyPhotoEntity))
         Mockito.`when`(photoRepository.getPhotos(dummyPage, dummyIsInitial))
             .thenReturn(Single.just(dummyPhotoState))
         val dummyPhotoItemModel = PhotoMapper.mapPhotoEntityToPhotoItemModel(dummyPhotoState.photos)

@@ -1,6 +1,5 @@
 package com.severianfw.picto.viewmodel
 
-import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.severianfw.picto.domain.model.PhotoItemModel
 import com.severianfw.picto.domain.usecase.GetPhotoUseCase
@@ -17,6 +16,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import java.io.IOError
 import java.io.IOException
 
 class HomeViewModelTest : BaseViewModelTest() {
@@ -135,7 +135,7 @@ class HomeViewModelTest : BaseViewModelTest() {
         val dummyPageNumber = 2
         val dummyIsInitial = false
         Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
-            .thenReturn(Single.error(IOException()))
+            .thenReturn(Single.just(listOf()))
 
         // When
         `when getPhotos then result should be valid`()
@@ -143,10 +143,13 @@ class HomeViewModelTest : BaseViewModelTest() {
         homeViewModel.loadMorePage()
 
         // Then
-        homeViewModel.hasError.observeForTesting {
+        homeViewModel.hasError.getOrAwaitValue {
             val actual = homeViewModel.hasError.value
-            Assert.assertEquals(actual, true)
+            Assert.assertEquals(actual, false)
         }
+//        homeViewModel.hasError.observeForTesting {
+//
+//        }
         val pageNumber = homeViewModel.getPageNumber()
         Assert.assertEquals(pageNumber, dummyPageNumber)
         Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
