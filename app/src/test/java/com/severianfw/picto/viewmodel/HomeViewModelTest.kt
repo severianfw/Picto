@@ -90,11 +90,13 @@ class HomeViewModelTest : BaseViewModelTest() {
         val dummyPageNumber = 2
         val dummyIsInitial = false
         val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
+        Mockito.`when`(getPhotoUseCase.invoke(1, true))
+            .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
         Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
 
         // When
-        `when getPhotos then result should be valid`()
+        homeViewModel.getPhotos()
         homeViewModel.setIsInitial(false)
         homeViewModel.loadMorePage()
 
@@ -103,8 +105,11 @@ class HomeViewModelTest : BaseViewModelTest() {
             val actual = homeViewModel.photos.value
             Assert.assertEquals(actual, listOf(dummyPhotoItemModel, dummyPhotoItemModel))
         }
-        Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
+        val pageNumber = homeViewModel.getPageNumber()
+        Assert.assertEquals(pageNumber, dummyPageNumber)
 
+        Mockito.verify(getPhotoUseCase).invoke(1, true)
+        Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)
     }
 
     @Test
@@ -113,10 +118,13 @@ class HomeViewModelTest : BaseViewModelTest() {
         val dummyPageNumber = 2
         val dummyPhotoName = "photo_name"
         val dummyPhotoItemModel = PhotoItemModel(id = "ID_1")
+        Mockito.`when`(searchPhotoUseCase.invoke(1, dummyPhotoName))
+            .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
         Mockito.`when`(searchPhotoUseCase.invoke(dummyPageNumber, dummyPhotoName))
             .thenReturn(Single.just(listOf(dummyPhotoItemModel)))
 
         // When
+        homeViewModel.searchPhotos(dummyPhotoName)
         homeViewModel.setPhotoName(dummyPhotoName)
         homeViewModel.setIsSearching(true)
         homeViewModel.loadMorePage()
@@ -124,32 +132,29 @@ class HomeViewModelTest : BaseViewModelTest() {
         // Then
         homeViewModel.photos.observeForTesting {
             val actual = homeViewModel.photos.value
-            Assert.assertEquals(actual, listOf(dummyPhotoItemModel))
+            Assert.assertEquals(actual, listOf(dummyPhotoItemModel, dummyPhotoItemModel))
         }
+        Mockito.verify(searchPhotoUseCase).invoke(1, dummyPhotoName)
         Mockito.verify(searchPhotoUseCase).invoke(dummyPageNumber, dummyPhotoName)
     }
 
     @Test
     fun `when load more page and has error, then page number must not be added by 1`() {
         // Given
-        val dummyPageNumber = 2
+        val dummyPageNumber = 1
         val dummyIsInitial = false
         Mockito.`when`(getPhotoUseCase.invoke(dummyPageNumber, dummyIsInitial))
-            .thenReturn(Single.just(listOf()))
+            .thenReturn(Single.error(IOException("")))
 
         // When
-        `when getPhotos then result should be valid`()
         homeViewModel.setIsInitial(false)
         homeViewModel.loadMorePage()
 
         // Then
-        homeViewModel.hasError.getOrAwaitValue {
+        homeViewModel.hasError.observeForTesting {
             val actual = homeViewModel.hasError.value
-            Assert.assertEquals(actual, false)
+            Assert.assertEquals(actual, true)
         }
-//        homeViewModel.hasError.observeForTesting {
-//
-//        }
         val pageNumber = homeViewModel.getPageNumber()
         Assert.assertEquals(pageNumber, dummyPageNumber)
         Mockito.verify(getPhotoUseCase).invoke(dummyPageNumber, dummyIsInitial)

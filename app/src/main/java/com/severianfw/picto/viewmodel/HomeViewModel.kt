@@ -73,7 +73,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d("MESSAGE", e.message.toString())
                         _hasError.value = true
                     }
 
