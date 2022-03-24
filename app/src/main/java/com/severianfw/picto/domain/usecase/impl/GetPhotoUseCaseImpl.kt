@@ -19,15 +19,19 @@ class GetPhotoUseCaseImpl @Inject constructor(
     private fun getPhotoItemModel(page: Int, isInitial: Boolean): Single<List<PhotoItemModel>> {
         return photoRepository.getPhotos(page, isInitial)
             .map { photoState ->
-                when (photoState) {
-                    is PhotoState.PhotoRemoteModel -> {
-                        return@map PhotoMapper.mapResponseToPhotoItemModel(photoState.photos)
-                    }
-                    is PhotoState.PhotoLocalModel -> {
-                        return@map PhotoMapper.mapPhotoEntityToPhotoItemModel(photoState.photos)
-                    }
-                }
+                mapPhotoState(photoState)
             }
+    }
+
+    private fun mapPhotoState(photoState: PhotoState): List<PhotoItemModel> {
+        return when (photoState) {
+            is PhotoState.PhotoRemoteModel -> {
+                PhotoMapper.mapResponseToPhotoItemModel(photoState.photos)
+            }
+            is PhotoState.PhotoLocalModel -> {
+                PhotoMapper.mapPhotoEntityToPhotoItemModel(photoState.photos)
+            }
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.severianfw.picto.data.repository
 
-import com.severianfw.picto.data.local.PhotoEntity
+import com.severianfw.picto.data.local.entity.PhotoEntity
 import com.severianfw.picto.data.remote.PhotoResponse
 
 sealed class PhotoState {

@@ -7,7 +7,7 @@ interface PhotoRepository {
 
     fun getPhotos(page: Int, isInitial: Boolean): Single<PhotoState>
     fun searchPhotos(page: Int, photoName: String): Single<SearchPhotoResponse>
-    fun getPhotosFromApi(page: Int): Single<PhotoState>
+    fun getPhotosFromRemote(page: Int): Single<PhotoState.PhotoRemoteModel>
     fun getLocalPhotos(page: Int): Single<PhotoState>
     fun deleteLocalPhotos()
 }

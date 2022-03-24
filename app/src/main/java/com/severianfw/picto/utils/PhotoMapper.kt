@@ -1,12 +1,12 @@
 package com.severianfw.picto.utils
 
-import com.severianfw.picto.data.local.PhotoEntity
+import com.severianfw.picto.data.local.entity.PhotoEntity
 import com.severianfw.picto.data.remote.PhotoResponse
 import com.severianfw.picto.domain.model.PhotoItemModel
 
 object PhotoMapper {
-    fun mapResponseToPhotoItemModel(response: List<PhotoResponse>): List<PhotoItemModel> {
-        return response.map { photo ->
+    fun mapResponseToPhotoItemModel(responses: List<PhotoResponse>): List<PhotoItemModel> {
+        return responses.map { photo ->
             PhotoItemModel(
                 id = photo.id.orEmpty(),
                 thumbnailImageUri = photo.urls?.regular.orEmpty(),
@@ -17,8 +17,8 @@ object PhotoMapper {
             )
         }
     }
-    fun mapResponseToPhotoEntity(response: List<PhotoResponse>): List<PhotoEntity> {
-        return response.map { photo ->
+    fun mapResponseToPhotoEntity(responses: List<PhotoResponse>): List<PhotoEntity> {
+        return responses.map { photo ->
             PhotoEntity(
                 id = photo.id.orEmpty(),
                 thumbnailImageUri = photo.urls?.regular.orEmpty(),
@@ -29,8 +29,8 @@ object PhotoMapper {
             )
         }
     }
-    fun mapPhotoEntityToPhotoItemModel(entity: List<PhotoEntity>): List<PhotoItemModel> {
-        return entity.map { photo ->
+    fun mapPhotoEntityToPhotoItemModel(entities: List<PhotoEntity>): List<PhotoItemModel> {
+        return entities.map { photo ->
             PhotoItemModel(
                 id = photo.id,
                 thumbnailImageUri = photo.thumbnailImageUri,

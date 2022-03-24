@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
@@ -18,7 +19,6 @@ import com.severianfw.picto.viewmodel.PhotoDetailViewModel
 import javax.inject.Inject
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.utils.DarkModeUtil
-import com.severianfw.picto.utils.ImageLoader
 import com.severianfw.picto.viewmodel.ViewModelFactory
 
 class PhotoDetailActivity : AppCompatActivity() {
@@ -52,26 +52,30 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun setupIconColor() {
         if (darkModeUtil.isDarkModeActive()) {
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_back_dark,
-                binding.btnBack
+            binding.btnBack.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_back_dark
+                )
             )
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_download_dark,
-                binding.btnDownload
+            binding.btnDownload.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_download_dark
+                )
             )
         } else {
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_back_light,
-                binding.btnBack
+            binding.btnBack.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_back_light
+                )
             )
-            ImageLoader.loadDrawableToImageButton(
-                this,
-                R.drawable.ic_download_light,
-                binding.btnDownload
+            binding.btnDownload.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_download_light
+                )
             )
         }
     }
