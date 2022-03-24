@@ -2,9 +2,9 @@ package com.severianfw.picto.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.severianfw.picto.domain.model.PhotoItemModel
+import com.severianfw.picto.data.local.entity.PhotoEntity
 
-@Database(entities = [PhotoItemModel::class], version = PhotoRoomDatabase.VERSION)
+@Database(entities = [PhotoEntity::class], version = PhotoRoomDatabase.VERSION)
 abstract class PhotoRoomDatabase : RoomDatabase() {
 
     companion object {

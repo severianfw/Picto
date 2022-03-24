@@ -46,6 +46,8 @@ class HomeViewModel @Inject constructor(
 
     fun getIsInitial(): Boolean = this.isInitial
 
+    fun getPageNumber() = this.pageNumber
+
     fun setPageNumber(pageNumber: Int) {
         this.pageNumber = pageNumber
     }
@@ -71,7 +73,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d("MESSAGE", e.message.toString())
                         _hasError.value = true
                     }
 
@@ -80,7 +81,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadMorePage() {
-        pageNumber += 1
+        if (_hasError.value == false) {
+            pageNumber += 1
+        }
         if (isSearching) {
             searchPhotos(photoName)
         } else {
