@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.severianfw.picto.PictoApplication
 import com.severianfw.picto.R
@@ -18,11 +19,14 @@ import com.severianfw.picto.viewmodel.PhotoDetailViewModel
 import javax.inject.Inject
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.utils.DarkModeUtil
+import com.severianfw.picto.viewmodel.ViewModelFactory
 
 class PhotoDetailActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var photoDetailViewModel: PhotoDetailViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val photoDetailViewModel by viewModels<PhotoDetailViewModel> { viewModelFactory }
 
     @Inject
     lateinit var darkModeUtil: DarkModeUtil

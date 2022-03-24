@@ -12,9 +12,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class HomeViewModel @Inject constructor(
     private val getPhotoUseCase: GetPhotoUseCase,
     private val searchPhotoUseCase: SearchPhotoUseCase

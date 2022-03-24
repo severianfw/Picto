@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding4.appcompat.queryTextChanges
@@ -17,6 +18,7 @@ import com.severianfw.picto.databinding.FragmentHomeBinding
 import com.severianfw.picto.utils.Constant
 import com.severianfw.picto.view.detail.PhotoDetailActivity
 import com.severianfw.picto.viewmodel.HomeViewModel
+import com.severianfw.picto.viewmodel.ViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
@@ -30,7 +32,9 @@ class HomeFragment : Fragment() {
     private var compositeDisposable = CompositeDisposable()
 
     @Inject
-    lateinit var homeViewModel: HomeViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val homeViewModel by viewModels<HomeViewModel> { viewModelFactory }
 
     companion object {
         const val SPAN_COUNT = 2
